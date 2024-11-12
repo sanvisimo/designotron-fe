@@ -10,6 +10,7 @@ import {
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PaletteComponent } from "@/components/Editor/Palette";
+import { palettes } from "@/lib/defaults";
 import { setColors } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
@@ -24,9 +25,7 @@ export const ColorEditor = () => {
     setOpen(false);
   };
 
-  const { currentPalette, palettes } = useSelector(
-    (state: RootState) => state.lottie,
-  );
+  const { currentPalette } = useSelector((state: RootState) => state.lottie);
   const handleChoose = (index: number) => {
     dispatch(setColors(index));
     setOpen(false);
