@@ -8,41 +8,12 @@ import {
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { HEXToRGB, RGBAToHexA } from "@/lib/canvasUtils";
-import album_release from "@/lib/features/player/album_release.json";
-import concert from "@/lib/features/player/concert.json";
+import { animations, palettes } from "@/lib/defaults";
 import { colorEdit, LottieState } from "@/lib/types";
 
 // Define the initial state using that type
 const initialState: LottieState = {
   currentAnimation: 0,
-  animations: [
-    {
-      id: 1,
-      animation: album_release as Animation,
-      title: "Album Release",
-      screenshot: "Album_release.png",
-    },
-    {
-      id: 2,
-      animation: concert as Animation,
-      title: "Concert",
-      screenshot: "Event.png",
-    },
-  ],
-  palettes: [
-    {
-      name: "Dark / Yellow",
-      colors: ["#1c1c1c", "#f7ad57", "#f5ab57"],
-    },
-    {
-      name: "Light / Green",
-      colors: ["#3f8b3e", "#3e8a3d", "#f2ede5"],
-    },
-    {
-      name: "Pink / Yellow",
-      colors: ["#f63", "#dad", "#1c1c1c"],
-    },
-  ],
   currentPalette: 0,
   animationData: null,
   frameRate: 25,
@@ -72,7 +43,7 @@ export const lottieSlice = createSlice({
       if (action.payload === null || action.payload === undefined) return;
       const colors: colorEdit[] = [];
 
-      const animationData = state.animations[action.payload].animation;
+      const animationData = animations[action.payload].animation;
       state.currentAnimation = action.payload;
 
       state.frameRate = animationData.fr ?? 25;
@@ -206,7 +177,7 @@ export const lottieSlice = createSlice({
       }
       state.colors = colors;
       const hexes = [...new Set(colors.map((c) => c.hex))];
-      state.currentPalette = state.palettes.findIndex(
+      state.currentPalette = palettes.findIndex(
         (x) => JSON.stringify(x.colors) === JSON.stringify(hexes),
       );
       state.audios = animationData.layers?.filter((layer) => layer.ty === 6);
@@ -250,8 +221,8 @@ export const lottieSlice = createSlice({
       const animationData = JSON.parse(
         JSON.stringify(state.animationData),
       ) as Animation;
-      const palette = { ...state.palettes[action.payload] };
-      const current = { ...state.palettes[state.currentPalette] };
+      const palette = { ...palettes[action.payload] };
+      const current = { ...palettes[state.currentPalette] };
 
       current.colors.forEach((color, index) => {
         state.colors.forEach((c, cIndex) => {

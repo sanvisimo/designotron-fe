@@ -34,9 +34,7 @@ export type Template = {
 // Define a type for the slice state
 export interface LottieState {
   currentAnimation: number;
-  animations: Template[];
   animationData: Animation | null;
-  palettes: Palette[];
   currentPalette: number;
   frameRate: number;
   time: string;

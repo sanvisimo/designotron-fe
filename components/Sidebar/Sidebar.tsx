@@ -4,19 +4,21 @@ import Image from "next/image";
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RadiusContainer } from "@/components/Layout/RadiusContainer";
+import { animations, palettes } from "@/lib/defaults";
 import { setAnimationData } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
 
-  const { animations, currentAnimation, currentPalette, palettes } =
-    useSelector((state: RootState) => state.lottie);
+  const { currentAnimation, currentPalette } = useSelector(
+    (state: RootState) => state.lottie,
+  );
 
   const defaultColor = useMemo(
     () =>
       palettes[currentPalette].colors[1] ?? palettes[currentPalette].colors[0],
-    [currentPalette, palettes],
+    [currentPalette],
   );
 
   return (
