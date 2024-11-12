@@ -2,13 +2,11 @@ import {
   Card,
   CardContent,
   Divider,
-  Menu,
   MenuItem,
   Popover,
   Stack,
   Typography,
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import { palette } from "@mui/system";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

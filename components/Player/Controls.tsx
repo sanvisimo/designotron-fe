@@ -32,7 +32,7 @@ export const Controls = () => {
 
   const progress = useMemo(
     () => (status !== "stop" ? (currentTime / (duration ?? 1)) * 100 : 0),
-    [currentTime, duration],
+    [currentTime, duration, status],
   );
 
   const seekerStyle = {

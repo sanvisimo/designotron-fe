@@ -1,7 +1,6 @@
 "use client";
 
-import { CircularProgress } from "@mui/material";
-import { Box } from "@mui/system";
+import { CircularProgress, Box } from "@mui/material";
 import lottie, { AnimationItem, BMEnterFrameEvent } from "lottie-web";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -75,7 +74,7 @@ export const Player = () => {
 
   useEffect(() => {
     animationInstanceRef?.current?.[status]();
-  }, [status, animationInstanceRef.current, loop]);
+  }, [status, loop, animationInstanceRef]);
 
   useEffect(() => {
     if (loaded && !!jump) {

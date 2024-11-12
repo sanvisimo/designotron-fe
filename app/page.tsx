@@ -1,7 +1,6 @@
 "use client";
 
-import { Animation } from "@lottie-animation-community/lottie-types";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +11,7 @@ import { Header } from "@/components/Layout/Header";
 import { Controls } from "@/components/Player/Controls";
 import { Player } from "@/components/Player/Player";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { setAnimationData, setColors } from "@/lib/features/player/lottieSlice";
+import { setAnimationData } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
 const theme = createTheme({

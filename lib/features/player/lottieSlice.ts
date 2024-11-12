@@ -258,16 +258,16 @@ export const lottieSlice = createSlice({
         state.colors.forEach((c, cIndex) => {
           if (c.hex === color) {
             c.indexes.reduce((acc, key, i) => {
-              // @ts-ignore
+              // @ts-expect-error: Key not valid
               if (acc[key] === undefined) {
-                // @ts-ignore
+                // @ts-expect-error: Key not valid
                 acc[key] = {};
               }
               if (i === c.indexes.length - 1) {
-                // @ts-ignore
+                // @ts-expect-error: Key not valid
                 acc[key] = HEXToRGB(palette.colors[index]);
               }
-              // @ts-ignore
+              // @ts-expect-error: Key not valid
               return acc[key];
             }, animationData);
 
