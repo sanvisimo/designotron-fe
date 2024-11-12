@@ -7,7 +7,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { palette } from "@mui/system";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PaletteComponent } from "@/components/Editor/Palette";
@@ -52,7 +51,7 @@ export const ColorEditor = () => {
                     <PaletteComponent
                       palette={pal}
                       onClick={handleClick}
-                      key={palette.name.trim()}
+                      key={pal.name.trim()}
                     />
                   ),
               )}
