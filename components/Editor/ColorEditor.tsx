@@ -32,8 +32,6 @@ export const ColorEditor = () => {
     setOpen(false);
   };
 
-  console.log("pope", open);
-
   return (
     <Card sx={{ minWidth: 275 }} ref={cardRef}>
       <CardContent>

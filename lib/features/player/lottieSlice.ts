@@ -206,7 +206,6 @@ export const lottieSlice = createSlice({
       }
       state.colors = colors;
       const hexes = [...new Set(colors.map((c) => c.hex))];
-      console.log("eh", hexes);
       state.currentPalette = state.palettes.findIndex(
         (x) => JSON.stringify(x.colors) === JSON.stringify(hexes),
       );
