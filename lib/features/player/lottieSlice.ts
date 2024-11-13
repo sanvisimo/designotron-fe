@@ -50,12 +50,13 @@ export const lottieSlice = createSlice({
 
       state.time = `${(animationData.op - animationData.ip) / state.frameRate} s`;
 
-      state.assets = animationData.assets;
+      localStorage.setItem("assets", JSON.stringify(animationData.assets));
+      localStorage.setItem("layers", JSON.stringify(animationData.layers));
 
-      state.layers = animationData.layers;
-      state.precomps = animationData.layers?.filter((layer) => layer.ty === 0);
-      if (state.precomps && state.precomps.length > 0) {
-        state.precomps?.forEach((precomp) => {
+      const precomps = animationData.layers?.filter((layer) => layer.ty === 0);
+      localStorage.setItem("precomps", JSON.stringify(precomps));
+      if (precomps && precomps.length > 0) {
+        precomps?.forEach((precomp) => {
           if (precomp.ef && !!precomp.ef.length) {
             const fill = precomp?.ef?.findIndex((e) => e.nm === "Fill");
             if (fill > -1) {
@@ -90,22 +91,29 @@ export const lottieSlice = createSlice({
           }
         });
       }
-      state.solids = animationData.layers?.filter((layer) => layer.ty === 1);
-      state.images = animationData.layers?.filter((layer) => layer.ty === 2);
-      if (state.images && state.images.length) {
-        const i = new Set(state.images?.map((i) => i.refId));
+      const solids = animationData.layers?.filter((layer) => layer.ty === 1);
+      localStorage.setItem("solids", JSON.stringify(solids));
+
+      const images = animationData.layers?.filter((layer) => layer.ty === 2);
+      localStorage.setItem("images", JSON.stringify(images));
+      state.imageAssets = [];
+      if (images && images.length) {
+        const i = new Set(images?.map((i) => i.refId));
         state.imageAssets = state.assets?.filter((asset) =>
           i.has(asset.id),
         ) as Asset.Image[];
       }
 
-      state.nullLayers = animationData.layers?.filter(
+      const nullLayers = animationData.layers?.filter(
         (layer) => layer.ty === 3,
       );
-      state.shapes = animationData.layers?.filter((layer) => layer.ty === 4);
+      localStorage.setItem("nullLayers", JSON.stringify(nullLayers));
 
-      if (state.shapes && state.shapes.length) {
-        state.shapes.forEach((layer) => {
+      const shapes = animationData.layers?.filter((layer) => layer.ty === 4);
+      localStorage.setItem("shapes", JSON.stringify(shapes));
+
+      if (shapes && shapes.length) {
+        shapes.forEach((layer) => {
           layer.shapes.forEach((shape, index: number) => {
             if (shape.ty === "gr" && !!shape.it) {
               const itIndex = shape.it.findIndex(
@@ -138,13 +146,13 @@ export const lottieSlice = createSlice({
         });
       }
 
-      state.textLayers = animationData.layers?.filter(
+      const textLayers = animationData.layers?.filter(
         (layer) => layer.ty === 5,
       );
 
-      if (state.textLayers && state.textLayers.length) {
+      if (textLayers && textLayers.length) {
         state.texts = {};
-        state.textLayers.forEach((layer) => {
+        textLayers.forEach((layer) => {
           if (layer.nm && layer.ind) {
             if (!state.texts[layer.nm]) {
               state.texts[layer.nm] = {
@@ -180,8 +188,10 @@ export const lottieSlice = createSlice({
       state.currentPalette = palettes.findIndex(
         (x) => JSON.stringify(x.colors) === JSON.stringify(hexes),
       );
-      state.audios = animationData.layers?.filter((layer) => layer.ty === 6);
-      state.videos = animationData.layers?.filter((layer) => layer.ty === 9);
+      const audios = animationData.layers?.filter((layer) => layer.ty === 6);
+      localStorage.setItem("audios", JSON.stringify(audios));
+      const videos = animationData.layers?.filter((layer) => layer.ty === 9);
+      localStorage.setItem("videos", JSON.stringify(videos));
 
       state.animationData = animationData;
     },
