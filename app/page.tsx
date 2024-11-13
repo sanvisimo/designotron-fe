@@ -1,12 +1,13 @@
 "use client";
 
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Card, CardContent, Divider } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorEditor } from "@/components/Editor/ColorEditor";
+import { ImageEditor } from "@/components/Editor/ImageEditor";
+import { LogoSwitch } from "@/components/Editor/LogoSwitch";
 import { TextEditor } from "@/components/Editor/TextEditor";
-import { UploadImage } from "@/components/Editor/UploadImage";
 import { Header } from "@/components/Layout/Header";
 import { Controls } from "@/components/Player/Controls";
 import { Player } from "@/components/Player/Player";
@@ -17,10 +18,9 @@ import { theme } from "@/lib/theme";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const { imageAssets, animationData } = useSelector(
-    (state: RootState) => state.lottie,
-  );
+  const { animationData } = useSelector((state: RootState) => state.lottie);
   useEffect(() => {
     dispatch(setAnimationData(1));
   }, []);
@@ -38,38 +38,42 @@ export default function Home() {
         })}
       >
         <Header />
+        <div className="px-2 mr-2">
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{ alignItems: "center", justifyContent: "space-between" }}
+          >
+            <Sidebar />
+            <div>
+              {animationData && <Player key={animationData?.nm?.trim()} />}
+            </div>
+            <Stack spacing={2} sx={{ width: "313px" }}>
+              <Card sx={{ minWidth: 275 }} ref={cardRef}>
+                <CardContent>
+                  <Stack
+                    spacing={2}
+                    divider={<Divider flexItem />}
+                    style={{ justifyContent: "center" }}
+                  >
+                    <ColorEditor anchor={cardRef.current} />
+                    <LogoSwitch />
+                  </Stack>
+                </CardContent>
+              </Card>
+              <TextEditor />
+              <ImageEditor />
+            </Stack>
+          </Stack>
+        </div>
         <Stack
           spacing={2}
           direction="row"
           sx={{ alignItems: "center", justifyContent: "space-between" }}
         >
-          <Sidebar />
-          <div>
-            {animationData && <Player key={animationData?.nm?.trim()} />}
-          </div>
-          <Stack spacing={2}>
-            <ColorEditor />
-            <TextEditor />
-            {!!imageAssets &&
-              imageAssets.map((image) => (
-                <UploadImage key={image.id} id={image.id} />
-              ))}
-          </Stack>
-        </Stack>
-        <Stack
-          spacing={2}
-          direction="row"
-          sx={(theme) => ({
-            alignItems: "center",
-            justifyContent: "center",
-            my: 4,
-            background: "#fff",
-            ...theme.applyStyles("dark", {
-              background: "#121212",
-            }),
-          })}
-        >
+          <div></div>
           <Controls />
+          <div></div>
         </Stack>
       </Box>
     </ThemeProvider>

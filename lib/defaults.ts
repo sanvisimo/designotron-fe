@@ -1,6 +1,6 @@
 import { Animation } from "@lottie-animation-community/lottie-types";
 import album_release from "@/lib/album_release.json";
-import concert from "@/lib/concert.json";
+import event from "@/lib/event.json";
 import { Palette, Template } from "@/lib/types";
 
 export const animations: Template[] = [
@@ -12,8 +12,8 @@ export const animations: Template[] = [
   },
   {
     id: 2,
-    animation: concert as Animation,
-    title: "Concert",
+    animation: event as Animation,
+    title: "Event",
     screenshot: "Event.png",
   },
 ];
@@ -24,10 +24,10 @@ export const palettes: Palette[] = [
   },
   {
     name: "Light / Green",
-    colors: ["#3f8b3e", "#3e8a3d", "#f2ede5"],
+    colors: ["#f2ede5", "#3f8b3e", "#3e8a3d"],
   },
   {
     name: "Pink / Yellow",
-    colors: ["#f63", "#dad", "#1c1c1c"],
+    colors: ["#1c1c1c", "#f63", "#dad"],
   },
 ];

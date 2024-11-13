@@ -2,7 +2,6 @@ import {
   Animation,
   Asset,
   Helpers,
-  Layer,
 } from "@lottie-animation-community/lottie-types";
 
 export type textEdit = {
@@ -12,9 +11,9 @@ export type textEdit = {
 
 export type colorEdit = {
   id: number;
+  index: number;
   indexes: Array<string | number>;
   nm?: string;
-  type: "precomps" | "shape" | "text";
   color: Helpers.ColorRgba;
   hex: string;
 };
@@ -38,18 +37,10 @@ export interface LottieState {
   currentPalette: number;
   frameRate: number;
   time: string;
-  assets?: Asset.Value[];
-  layers?: Layer.Value[];
   colors: colorEdit[];
   hexes?: string[];
-  precomps?: Layer.Precomposition[];
-  solids?: Layer.SolidColor[];
-  images?: Layer.Image[];
-  nullLayers?: Layer.Null[];
   imageAssets?: Asset.Image[];
-  shapes?: Layer.Shape[];
   texts: Record<string, textEdit>;
-  textLayers?: Layer.Text[];
-  audios?: Layer.Audio[];
-  videos?: Layer.Video[];
+  logo: number[];
+  hasLogo: boolean;
 }

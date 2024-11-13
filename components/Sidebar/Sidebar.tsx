@@ -16,13 +16,14 @@ export const Sidebar = () => {
 
   const defaultColor = useMemo(
     () =>
-      palettes[currentPalette].colors[1] ?? palettes[currentPalette].colors[0],
+      palettes?.[currentPalette]?.colors[1] ??
+      palettes?.[currentPalette]?.colors[0],
     [currentPalette],
   );
 
   return (
     <div className="px-2">
-      <Card sx={{ minWidth: 275 }}>
+      <Card sx={{ width: 175 }}>
         <CardContent>
           <Stack spacing={4} sx={{ p: 2.5 }}>
             {animations.map((animation, index) => {

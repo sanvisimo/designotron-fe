@@ -1,3 +1,4 @@
+import { AccountCircle } from "@mui/icons-material";
 import { AppBar, Stack } from "@mui/material";
 import { DarkModeToggle } from "@/components/Layout/DarkModeToggle";
 import { RadiusContainer } from "@/components/Layout/RadiusContainer";
@@ -11,7 +12,13 @@ export const Header = () => {
         sx={{ justifyContent: "space-between", alignItems: "center" }}
       >
         <div></div>
-        <RadiusContainer>Design-O-Tron</RadiusContainer>
+        <RadiusContainer>
+          <div className="flex items-center justify-between">
+            <div></div>
+            <span>Design-O-Tron</span>
+            <AccountCircle />
+          </div>
+        </RadiusContainer>
         <div>
           <DarkModeToggle />
         </div>

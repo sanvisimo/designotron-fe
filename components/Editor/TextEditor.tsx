@@ -1,6 +1,7 @@
-import { Card, CardContent, Stack, TextField } from "@mui/material";
+import { Card, CardContent, Stack, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { EditorLabel } from "@/components/Editor/EditorLabel";
 import { updateText } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
@@ -29,6 +30,7 @@ export const TextEditor = () => {
   return Object.entries(texts).length ? (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
+        <EditorLabel>CONTENT TEXT</EditorLabel>
         <Stack spacing={2}>
           {texts &&
             Object.entries(values).map(([key, value]) => {
@@ -38,7 +40,7 @@ export const TextEditor = () => {
                     id="outlined-basic"
                     label={key}
                     value={value}
-                    variant="outlined"
+                    variant="standard"
                     onChange={(e) => {
                       handleChange(key, e.target.value);
                     }}

@@ -188,5 +188,10 @@ export function HEXToRGB(h: string): Helpers.ColorRgba {
     b = "0x" + h[5] + h[6];
   }
 
-  return [Number(r) / 255, Number(g) / 255, Number(b) / 255, 1];
+  return [
+    Number((Number(r) / 255).toFixed(3)),
+    Number((Number(g) / 255).toFixed(3)),
+    Number((Number(b) / 255).toFixed(3)),
+    1,
+  ];
 }

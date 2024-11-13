@@ -21,6 +21,8 @@ const initialState: LottieState = {
   colors: [],
   imageAssets: [],
   texts: {},
+  logo: [],
+  hasLogo: false,
 };
 
 export const lottieSlice = createSlice({
@@ -39,72 +41,49 @@ export const lottieSlice = createSlice({
 
       state.time = `${(animationData.op - animationData.ip) / state.frameRate} s`;
 
-      const assets = animationData.assets;
-      localStorage.setItem("assets", JSON.stringify(animationData.assets));
-      localStorage.setItem("layers", JSON.stringify(animationData.layers));
+      const i = new Set();
+      state.texts = {};
+      state.logo = [];
+      animationData.layers.forEach((layer, index) => {
+        if (!layer.ind || !layer.nm) return;
 
-      const precomps = animationData.layers?.filter((layer) => layer.ty === 0);
-      localStorage.setItem("precomps", JSON.stringify(precomps));
-      if (precomps && precomps.length > 0) {
-        precomps?.forEach((precomp) => {
-          if (precomp.ef && !!precomp.ef.length) {
-            const fill = precomp?.ef?.findIndex((e) => e.nm === "Fill");
-            if (fill > -1) {
-              const kIndex = precomp.ef[fill].ef.findIndex((e) => e.ty === 2);
+        if (layer.nm.toLowerCase().includes("logo")) {
+          state.logo.push(layer.ind);
+          state.hasLogo = true;
+        }
 
-              if (
-                kIndex > -1 &&
-                precomp.ind &&
-                precomp?.ef?.[fill]?.ef?.[kIndex].ty === 2
-              ) {
-                const color = precomp.ef[fill].ef[kIndex]
-                  .v as AnimatedProperty.Color;
+        if (layer.ty === 0 && layer.ef && !!layer.ef.length) {
+          /** TYPE Precomps **/
+          const fill = layer?.ef?.findIndex((e) => e.nm === "Fill");
+          if (fill > -1) {
+            const kIndex = layer.ef[fill].ef.findIndex((e) => e.ty === 2);
 
-                colors.push(<colorEdit>{
-                  id: precomp.ind,
-                  indexes: [
-                    "layers",
-                    precomp.ind - 1,
-                    "ef",
-                    fill,
-                    "ef",
-                    kIndex,
-                    "v",
-                    "k",
-                  ],
-                  type: "precomps",
-                  color: color.k as Helpers.ColorRgba,
-                  hex: RGBAToHexA(color.k as Helpers.ColorRgba),
-                });
-              }
+            if (
+              kIndex > -1 &&
+              layer.ind &&
+              layer?.ef?.[fill]?.ef?.[kIndex].ty === 2
+            ) {
+              const color = layer.ef[fill].ef[kIndex]
+                .v as AnimatedProperty.Color;
+
+              colors.push(<colorEdit>{
+                id: layer.ind,
+                index,
+                indexes: ["layers", index, "ef", fill, "ef", kIndex, "v", "k"],
+                color: color.k as Helpers.ColorRgba,
+                hex: RGBAToHexA(color.k as Helpers.ColorRgba),
+              });
             }
           }
-        });
-      }
-      const solids = animationData.layers?.filter((layer) => layer.ty === 1);
-      localStorage.setItem("solids", JSON.stringify(solids));
+        }
 
-      const images = animationData.layers?.filter((layer) => layer.ty === 2);
-      localStorage.setItem("images", JSON.stringify(images));
-      state.imageAssets = [];
-      if (images && images.length) {
-        const i = new Set(images?.map((i) => i.refId));
-        state.imageAssets = assets?.filter((asset) =>
-          i.has(asset.id),
-        ) as Asset.Image[];
-      }
-
-      const nullLayers = animationData.layers?.filter(
-        (layer) => layer.ty === 3,
-      );
-      localStorage.setItem("nullLayers", JSON.stringify(nullLayers));
-
-      const shapes = animationData.layers?.filter((layer) => layer.ty === 4);
-      localStorage.setItem("shapes", JSON.stringify(shapes));
-
-      if (shapes && shapes.length) {
-        shapes.forEach((layer) => {
-          layer.shapes.forEach((shape, index: number) => {
+        /** TYPE Images **/
+        if (layer.ty === 2) {
+          i.add(layer.refId);
+        }
+        /** TYPE SHAPE **/
+        if (layer.ty === 4) {
+          layer.shapes.forEach((shape, sIndex: number) => {
             if (shape.ty === "gr" && !!shape.it) {
               const itIndex = shape.it.findIndex(
                 (i) => i.ty === "st" || i.ty === "fl",
@@ -115,17 +94,17 @@ export const lottieSlice = createSlice({
                   const c = color.c as AnimatedProperty.Color;
                   colors.push(<colorEdit>{
                     id: layer.ind,
+                    index,
                     indexes: [
                       "layers",
-                      layer.ind - 1,
-                      "shapes",
                       index,
+                      "shapes",
+                      sIndex,
                       "it",
                       itIndex,
                       "c",
                       "k",
                     ],
-                    type: "shape",
                     color: c.k as Helpers.ColorRgba,
                     hex: RGBAToHexA(c.k as Helpers.ColorRgba),
                   });
@@ -133,16 +112,10 @@ export const lottieSlice = createSlice({
               }
             }
           });
-        });
-      }
+        }
 
-      const textLayers = animationData.layers?.filter(
-        (layer) => layer.ty === 5,
-      );
-
-      if (textLayers && textLayers.length) {
-        state.texts = {};
-        textLayers.forEach((layer) => {
+        /** TYPE Texts **/
+        if (layer.ty === 5) {
           if (layer.nm && layer.ind) {
             if (!state.texts[layer.nm]) {
               state.texts[layer.nm] = {
@@ -151,33 +124,45 @@ export const lottieSlice = createSlice({
               };
             }
 
-            const index = layer.t.d.k[0].s.fc ? "fc" : "sc";
-
-            colors.push(<colorEdit>{
-              id: layer.ind,
-              indexes: [
-                "layers",
-                layer.ind - 1,
-                "t",
-                "d",
-                "k",
-                "0",
-                "s",
+            if (layer.t.d.k[0].s.fc) {
+              colors.push(<colorEdit>{
+                id: layer.ind,
                 index,
-              ],
-              type: "text",
-              color: layer.t.d.k[0].s.fc ?? layer.t.d.k[0].s.sc,
-              hex: RGBAToHexA(layer.t.d.k[0].s.fc ?? layer.t.d.k[0].s.sc),
-            });
+                indexes: ["layers", index, "t", "d", "k", "0", "s", "fc"],
+                color: layer.t.d.k[0].s.fc,
+                hex: RGBAToHexA(layer.t.d.k[0].s.fc),
+              });
+            }
+            if (layer.t.d.k[0].s.sc) {
+              colors.push(<colorEdit>{
+                id: layer.ind,
+                indexes: ["layers", index, "t", "d", "k", "0", "s", "sc"],
+                index,
+                color: layer.t.d.k[0].s.sc,
+                hex: RGBAToHexA(layer.t.d.k[0].s.sc),
+              });
+            }
             state.texts[layer.nm].layers.push(layer.ind);
           }
-        });
+        }
+      });
+      state.imageAssets = [];
+      if (animationData.layers.some((layer) => layer.ty === 2)) {
+        state.imageAssets = animationData.assets?.filter((asset) =>
+          i.has(asset.id),
+        ) as Asset.Image[];
       }
       state.colors = colors;
-      const hexes = [...new Set(colors.map((c) => c.hex))];
-      state.currentPalette = palettes.findIndex(
-        (x) => JSON.stringify(x.colors) === JSON.stringify(hexes),
+      const hexes = [...new Set(colors.map((c) => c.hex))].toSorted((a, b) =>
+        a < b ? -1 : 1,
       );
+
+      state.currentPalette = palettes.findIndex(
+        (x) =>
+          JSON.stringify(x.colors.toSorted((a, b) => (a < b ? -1 : 1))) ===
+          JSON.stringify(hexes),
+      );
+
       const audios = animationData.layers?.filter((layer) => layer.ty === 6);
       localStorage.setItem("audios", JSON.stringify(audios));
       const videos = animationData.layers?.filter((layer) => layer.ty === 9);
@@ -207,12 +192,16 @@ export const lottieSlice = createSlice({
     },
     updateImage: (state, action) => {
       const animationData = { ...state.animationData } as Animation;
-      if (animationData.assets) {
+      if (animationData.assets && state.imageAssets) {
         const index = animationData.assets.findIndex(
           (a) => a.id === action.payload.id,
         );
         if ("p" in animationData.assets[index]) {
           animationData.assets[index].p = action.payload.croppedImage;
+          const i = state.imageAssets.findIndex(
+            (a) => a.id === action.payload.id,
+          );
+          state.imageAssets[i].p = action.payload.croppedImage;
           state.animationData = animationData;
         }
       }
@@ -254,10 +243,40 @@ export const lottieSlice = createSlice({
       state.currentPalette = action.payload;
       state.animationData = animationData;
     },
+    toggleLogo: (state, action) => {
+      const animationData = JSON.parse(
+        JSON.stringify(state.animationData),
+      ) as Animation;
+      state.animationData = null;
+      let layers = animationData.layers;
+      if (action.payload) {
+        layers = [
+          ...animationData.layers,
+          ...animations[state.currentAnimation].animation.layers.filter(
+            (layer) => layer.ind && state.logo.includes(layer.ind),
+          ),
+        ].sort((a, b) => Number(a.ind ?? 0) - Number(b.ind ?? 0));
+      } else {
+        layers = animationData.layers.filter(
+          (layer) => layer.ind && !state.logo.includes(layer.ind),
+        );
+      }
+      state.animationData = {
+        ...animationData,
+        layers,
+      };
+
+      state.hasLogo = action.payload;
+    },
   },
 });
 
-export const { setAnimationData, updateText, updateImage, setColors } =
-  lottieSlice.actions;
+export const {
+  setAnimationData,
+  updateText,
+  updateImage,
+  setColors,
+  toggleLogo,
+} = lottieSlice.actions;
 
 export default lottieSlice.reducer;
