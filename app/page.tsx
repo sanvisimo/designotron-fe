@@ -20,7 +20,9 @@ export default function Home() {
   const dispatch = useDispatch();
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const { animationData } = useSelector((state: RootState) => state.lottie);
+  const { animationData, logo } = useSelector(
+    (state: RootState) => state.lottie,
+  );
   useEffect(() => {
     dispatch(setAnimationData(1));
   }, []);
@@ -49,18 +51,20 @@ export default function Home() {
               {animationData && <Player key={animationData?.nm?.trim()} />}
             </div>
             <Stack spacing={2} sx={{ width: "313px" }}>
-              <Card sx={{ minWidth: 275 }} ref={cardRef}>
-                <CardContent>
-                  <Stack
-                    spacing={2}
-                    divider={<Divider flexItem />}
-                    style={{ justifyContent: "center" }}
-                  >
-                    <ColorEditor anchor={cardRef.current} />
-                    <LogoSwitch />
-                  </Stack>
-                </CardContent>
-              </Card>
+              {!!logo.length && (
+                <Card sx={{ minWidth: 275 }} ref={cardRef}>
+                  <CardContent>
+                    <Stack
+                      spacing={2}
+                      divider={<Divider flexItem />}
+                      style={{ justifyContent: "center" }}
+                    >
+                      <ColorEditor anchor={cardRef.current} />
+                      <LogoSwitch />
+                    </Stack>
+                  </CardContent>
+                </Card>
+              )}
               <TextEditor />
               <ImageEditor />
             </Stack>

@@ -1,4 +1,4 @@
-import { MenuItem, Popover, Typography } from "@mui/material";
+import { MenuItem, Popover } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
