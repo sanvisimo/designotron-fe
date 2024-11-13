@@ -26,30 +26,28 @@ export const TextEditor = () => {
     dispatch(updateText({ key, text }));
   };
 
-  return (
-    <div>
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Stack spacing={2}>
-            {texts &&
-              Object.entries(values).map(([key, value]) => {
-                return (
-                  <div key={key}>
-                    <TextField
-                      id="outlined-basic"
-                      label={key}
-                      value={value}
-                      variant="outlined"
-                      onChange={(e) => {
-                        handleChange(key, e.target.value);
-                      }}
-                    />
-                  </div>
-                );
-              })}
-          </Stack>
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return Object.entries(texts).length ? (
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Stack spacing={2}>
+          {texts &&
+            Object.entries(values).map(([key, value]) => {
+              return (
+                <div key={key}>
+                  <TextField
+                    id="outlined-basic"
+                    label={key}
+                    value={value}
+                    variant="outlined"
+                    onChange={(e) => {
+                      handleChange(key, e.target.value);
+                    }}
+                  />
+                </div>
+              );
+            })}
+        </Stack>
+      </CardContent>
+    </Card>
+  ) : null;
 };

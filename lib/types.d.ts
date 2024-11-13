@@ -41,7 +41,7 @@ export interface LottieState {
   assets?: Asset.Value[];
   layers?: Layer.Value[];
   colors: colorEdit[];
-  hexes: string[];
+  hexes?: string[];
   precomps?: Layer.Precomposition[];
   solids?: Layer.SolidColor[];
   images?: Layer.Image[];

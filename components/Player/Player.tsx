@@ -51,7 +51,7 @@ export const Player = () => {
     // Save the animation instance
     animationInstanceRef.current = lottie.loadAnimation(config);
 
-    dispatch(setPlay("play"));
+    dispatch(setPlay(loop ? "play" : "stop"));
 
     dispatch(setLoaded(!!animationInstanceRef.current));
     dispatch(setDuration(animationInstanceRef.current.getDuration(true)));
@@ -94,7 +94,7 @@ export const Player = () => {
       dispatch(setPlay("stop"));
     };
 
-    if (animationInstanceRef?.current) {
+    if (animationInstanceRef?.current && animationData) {
       animationInstanceRef?.current?.addEventListener(
         "enterFrame",
         manageFrame,
@@ -103,7 +103,7 @@ export const Player = () => {
     }
 
     return () => {
-      if (animationInstanceRef?.current) {
+      if (animationInstanceRef?.current && animationData) {
         animationInstanceRef?.current?.removeEventListener(
           "enterFrame",
           manageFrame,
@@ -114,7 +114,7 @@ export const Player = () => {
         );
       }
     };
-  }, [animationInstanceRef, loop, loaded]);
+  }, [animationInstanceRef, loop, loaded, animationData]);
 
   return (
     <Box

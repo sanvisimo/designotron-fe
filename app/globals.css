@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Field Gothic";
+  src: url("../fonts/Field_Gothic.ttf") format("opentype");
+}

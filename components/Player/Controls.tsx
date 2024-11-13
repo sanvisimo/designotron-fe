@@ -1,7 +1,7 @@
 "use client";
 
 import { Pause, PlayArrow, Repeat, Stop } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { ChangeEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./player.scss";
@@ -37,7 +37,7 @@ export const Controls = () => {
 
   const seekerStyle = {
     width: "100%",
-    background: `linear-gradient(to right, #f50 ${progress}%, blue ${progress}%)`,
+    background: `linear-gradient(to right, #3B7AE8 ${progress}%, #DFDAE3 ${progress}%)`,
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +54,25 @@ export const Controls = () => {
   return (
     <RadiusContainer>
       <div id="controls" style={{ width: 600 }}>
-        <div className="flex items-center justify-between">
-          <IconButton aria-label="play/pause" onClick={handlePlay}>
+        <Stack
+          alignItems="center"
+          spacing={0.5}
+          justifyContent="space-between"
+          direction="row"
+          useFlexGap
+        >
+          <IconButton
+            aria-label="play/pause"
+            onClick={handlePlay}
+            sx={{ px: 0, py: 1 }}
+          >
             {status === "play" ? <Pause /> : <PlayArrow />}
           </IconButton>
-          <IconButton aria-label="play/pause" onClick={handleStop}>
+          <IconButton
+            aria-label="play/pause"
+            onClick={handleStop}
+            sx={{ px: 0, py: 1 }}
+          >
             <Stop />
           </IconButton>
           <div style={{ flex: "1 0 auto" }}>
@@ -83,11 +97,17 @@ export const Controls = () => {
           <IconButton
             aria-label="loop"
             onClick={handleLoop}
-            color={loop ? "primary" : "secondary"}
+            sx={(theme) => ({
+              px: 0,
+              py: 1,
+              color: loop
+                ? theme.palette.secondary.main
+                : theme.palette.primary.contrastText,
+            })}
           >
             <Repeat />
           </IconButton>
-        </div>
+        </Stack>
       </div>
     </RadiusContainer>
   );

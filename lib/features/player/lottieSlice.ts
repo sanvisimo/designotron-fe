@@ -18,20 +18,9 @@ const initialState: LottieState = {
   animationData: null,
   frameRate: 25,
   time: "0.00 s",
-  assets: [],
-  layers: [],
   colors: [],
-  hexes: [],
-  precomps: [],
-  solids: [],
-  images: [],
   imageAssets: [],
-  nullLayers: [],
-  shapes: [],
   texts: {},
-  textLayers: [],
-  audios: [],
-  videos: [],
 };
 
 export const lottieSlice = createSlice({
@@ -50,6 +39,7 @@ export const lottieSlice = createSlice({
 
       state.time = `${(animationData.op - animationData.ip) / state.frameRate} s`;
 
+      const assets = animationData.assets;
       localStorage.setItem("assets", JSON.stringify(animationData.assets));
       localStorage.setItem("layers", JSON.stringify(animationData.layers));
 
@@ -99,7 +89,7 @@ export const lottieSlice = createSlice({
       state.imageAssets = [];
       if (images && images.length) {
         const i = new Set(images?.map((i) => i.refId));
-        state.imageAssets = state.assets?.filter((asset) =>
+        state.imageAssets = assets?.filter((asset) =>
           i.has(asset.id),
         ) as Asset.Image[];
       }
@@ -231,6 +221,7 @@ export const lottieSlice = createSlice({
       const animationData = JSON.parse(
         JSON.stringify(state.animationData),
       ) as Animation;
+      state.animationData = null;
       const palette = { ...palettes[action.payload] };
       const current = { ...palettes[state.currentPalette] };
 

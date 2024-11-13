@@ -1,7 +1,7 @@
 "use client";
 
-import { Stack } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Stack, Box } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorEditor } from "@/components/Editor/ColorEditor";
@@ -13,32 +13,30 @@ import { Player } from "@/components/Player/Player";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { setAnimationData } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
-
-const theme = createTheme({
-  colorSchemes: {
-    dark: true,
-  },
-  palette: {
-    primary: {
-      main: "#fff",
-      light: "#fff",
-      dark: "#fff",
-      contrastText: " #fff",
-    },
-  },
-});
+import { theme } from "@/lib/theme";
 
 export default function Home() {
   const dispatch = useDispatch();
 
-  const { imageAssets } = useSelector((state: RootState) => state.lottie);
+  const { imageAssets, animationData } = useSelector(
+    (state: RootState) => state.lottie,
+  );
   useEffect(() => {
     dispatch(setAnimationData(1));
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="h-screen flex align-center justify-between flex-col">
+      <Box
+        component="main"
+        className="h-screen flex align-center justify-between flex-col"
+        sx={(theme) => ({
+          background: "transparent",
+          ...theme.applyStyles("dark", {
+            background: "#121212",
+          }),
+        })}
+      >
         <Header />
         <Stack
           spacing={2}
@@ -47,7 +45,7 @@ export default function Home() {
         >
           <Sidebar />
           <div>
-            <Player />
+            {animationData && <Player key={animationData?.nm?.trim()} />}
           </div>
           <Stack spacing={2}>
             <ColorEditor />
@@ -61,11 +59,19 @@ export default function Home() {
         <Stack
           spacing={2}
           direction="row"
-          sx={{ alignItems: "center", justifyContent: "center", my: 4 }}
+          sx={(theme) => ({
+            alignItems: "center",
+            justifyContent: "center",
+            my: 4,
+            background: "#fff",
+            ...theme.applyStyles("dark", {
+              background: "#121212",
+            }),
+          })}
         >
           <Controls />
         </Stack>
-      </main>
+      </Box>
     </ThemeProvider>
   );
 }

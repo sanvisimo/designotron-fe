@@ -10,13 +10,13 @@
 
 #range1::-webkit-slider-runnable-track {
   height: 3px;
-  background: blue;
+  background: #DFDAE3;
   border-radius: 50%;
 }
 
 #range1::-moz-range-track {
   height: 3px;
-  background: blue;
+  background: #DFDAE3;
   border-radius: 50%;
 }
 
@@ -25,19 +25,19 @@
   appearance: none;
   height: 3px;
   width: 3px;
-  background-color: #f50;
+  background-color: #3B7AE8;
   border-radius: 50%;
-  border: 2px solid #f50;
-  box-shadow: -407px 0 0 400px #f50;
+  border: 2px solid #3B7AE8;
+  box-shadow: -407px 0 0 400px #3B7AE8;
 }
 
 #range1::-moz-range-thumb {
   height: 3px;
   width: 3px;
-  background-color: #f50;
+  background-color: #3B7AE8;
   border-radius: 50%;
-  border: 1px solid #f50;
-  box-shadow: -407px 0 0 400px #f50;
+  border: 1px solid #3B7AE8;
+  box-shadow: -407px 0 0 400px #3B7AE8;
 }
 
 .range{
