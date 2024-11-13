@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { Box, FormControlLabel, Switch } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
 import { toggleLogo } from "@/lib/features/player/lottieSlice";
