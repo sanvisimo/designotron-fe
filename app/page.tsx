@@ -66,7 +66,7 @@ export default function Home() {
                 </Card>
               )}
               <TextEditor />
-              <ImageEditor />
+              <ImageEditor key={animationData?.nm ?? "1"} />
             </Stack>
           </Stack>
         </div>

@@ -12,6 +12,7 @@ export type ImageInputProps = {
 
 export const ImageInput = ({ image, onChange }: ImageInputProps) => {
   const [file, setFile] = useState<File | null>(null);
+
   const handleChange = (newFile: File | null, id: string) => {
     if (newFile) {
       setFile(newFile);

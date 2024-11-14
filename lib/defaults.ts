@@ -1,6 +1,7 @@
 import { Animation } from "@lottie-animation-community/lottie-types";
 import album_release from "@/lib/album_release.json";
 import event from "@/lib/event.json";
+import test from "@/lib/thisisjustatest.json";
 import { Palette, Template } from "@/lib/types";
 
 export const animations: Template[] = [
@@ -14,6 +15,12 @@ export const animations: Template[] = [
     id: 2,
     animation: event as Animation,
     title: "Event",
+    screenshot: "Event.png",
+  },
+  {
+    id: 3,
+    animation: test as Animation,
+    title: "Test",
     screenshot: "Event.png",
   },
 ];
