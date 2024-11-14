@@ -51,20 +51,25 @@ export default function Home() {
               {animationData && <Player key={animationData?.nm?.trim()} />}
             </div>
             <Stack spacing={2} sx={{ width: "313px" }}>
-              {!!logo.length && (
-                <Card sx={{ minWidth: 275 }} ref={cardRef}>
-                  <CardContent>
-                    <Stack
-                      spacing={2}
-                      divider={<Divider flexItem />}
-                      style={{ justifyContent: "center" }}
-                    >
-                      <ColorEditor anchor={cardRef.current} />
-                      <LogoSwitch />
-                    </Stack>
-                  </CardContent>
-                </Card>
-              )}
+              <Card
+                sx={{
+                  minWidth: 275,
+                  visibility: logo.length ? "visible" : "hidden",
+                }}
+                ref={cardRef}
+              >
+                <CardContent>
+                  <Stack
+                    spacing={2}
+                    divider={<Divider flexItem />}
+                    style={{ justifyContent: "center" }}
+                  >
+                    <ColorEditor anchor={cardRef} />
+                    <LogoSwitch />
+                  </Stack>
+                </CardContent>
+              </Card>
+
               <TextEditor />
               <ImageEditor key={animationData?.nm ?? "1"} />
             </Stack>

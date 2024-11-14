@@ -1,5 +1,5 @@
 import { MenuItem, Popover } from "@mui/material";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
 import { PaletteComponent } from "@/components/Editor/Palette";
@@ -8,7 +8,7 @@ import { setColors } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
 export type ColorEditorProps = {
-  anchor: HTMLDivElement | null;
+  anchor: RefObject<HTMLDivElement | null>;
 };
 
 export const ColorEditor = ({ anchor }: ColorEditorProps) => {
@@ -27,7 +27,7 @@ export const ColorEditor = ({ anchor }: ColorEditorProps) => {
     setOpen(false);
   };
 
-  if (!anchor) return null;
+  if (!anchor.current) return null;
 
   return (
     <div>
@@ -45,7 +45,7 @@ export const ColorEditor = ({ anchor }: ColorEditorProps) => {
         )}
         <Popover
           id="basic-menu"
-          anchorEl={anchor}
+          anchorEl={anchor.current}
           open={open}
           onClose={handleClose}
           anchorOrigin={{
