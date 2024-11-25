@@ -8,6 +8,7 @@ import { ColorEditor } from "@/components/Editor/ColorEditor";
 import { ImageEditor } from "@/components/Editor/ImageEditor";
 import { LogoSwitch } from "@/components/Editor/LogoSwitch";
 import { TextEditor } from "@/components/Editor/TextEditor";
+import { ExportContainer } from "@/components/Export/ExportContainer";
 import { Header } from "@/components/Layout/Header";
 import { Controls } from "@/components/Player/Controls";
 import { Player } from "@/components/Player/Player";
@@ -87,7 +88,7 @@ export default function Home() {
           >
             <div style={{ width: 175 }} />
             <Controls />
-            <div style={{ width: 313 }} />
+            <ExportContainer />
           </Stack>
         </div>
       </Box>
