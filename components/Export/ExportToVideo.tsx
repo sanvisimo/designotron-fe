@@ -77,7 +77,7 @@ export const ExportToVideo = ({
         const diff = Math.random() * 5;
         return Math.min(oldProgress + diff, 100);
       });
-    }, 500);
+    }, 1000);
 
     return () => {
       clearInterval(timer);

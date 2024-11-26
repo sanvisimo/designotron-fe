@@ -38,7 +38,7 @@ export const Sidebar = () => {
                   }}
                 >
                   <Image
-                    src={`/${animation.screenshot}`}
+                    src={`/thumbnails/${animation.screenshot}`}
                     sizes="100vw"
                     style={{
                       width: "100%",

@@ -10,8 +10,7 @@ export type textEdit = {
 };
 
 export type colorEdit = {
-  id: number;
-  index: number;
+  // id: number;
   indexes: Array<string | number>;
   nm?: string;
   color: Helpers.ColorRgba;

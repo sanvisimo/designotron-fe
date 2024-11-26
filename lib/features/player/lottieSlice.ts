@@ -23,6 +23,7 @@ const initialState: LottieState = {
   texts: {},
   logo: [],
   hasLogo: false,
+  hexes: [],
 };
 
 export const lottieSlice = createSlice({
@@ -44,6 +45,56 @@ export const lottieSlice = createSlice({
       const i = new Set();
       state.texts = {};
       state.logo = [];
+
+      if (animationData.assets && animationData.assets.length) {
+        animationData.assets.forEach((asset, index) => {
+          if ("layers" in asset) {
+            console.log("asset", asset);
+            asset.layers.forEach((layer, layerInd) => {
+              if (layer.ty === 4) {
+                layer.shapes.forEach((shape, sIndex: number) => {
+                  if (shape.ty === "gr" && !!shape.it) {
+                    const itIndex = shape.it.findIndex(
+                      (i) => i.ty === "st" || i.ty === "fl",
+                    );
+                    if (itIndex > -1 && layer.ind) {
+                      const color = shape.it[itIndex] as
+                        | Shape.Stroke
+                        | Shape.Fill;
+                      if ("c" in color) {
+                        const c = color.c as AnimatedProperty.Color;
+
+                        console.log(
+                          "color",
+                          RGBAToHexA(c.k as Helpers.ColorRgba),
+                        );
+
+                        colors.push(<colorEdit>{
+                          indexes: [
+                            "assets",
+                            index,
+                            "layers",
+                            layerInd,
+                            "shapes",
+                            sIndex,
+                            "it",
+                            itIndex,
+                            "c",
+                            "k",
+                          ],
+                          color: c.k as Helpers.ColorRgba,
+                          hex: RGBAToHexA(c.k as Helpers.ColorRgba),
+                        });
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+
       animationData.layers.forEach((layer, index) => {
         if (!layer.ind || !layer.nm) return;
 
@@ -52,29 +103,17 @@ export const lottieSlice = createSlice({
           state.hasLogo = true;
         }
 
-        if (layer.ty === 0 && layer.ef && !!layer.ef.length) {
+        if (layer.ty === 0) {
           /** TYPE Precomps **/
-          const fill = layer?.ef?.findIndex((e) => e.nm === "Fill");
-          if (fill > -1) {
-            const kIndex = layer.ef[fill].ef.findIndex((e) => e.ty === 2);
-
-            if (
-              kIndex > -1 &&
-              layer.ind &&
-              layer?.ef?.[fill]?.ef?.[kIndex].ty === 2
-            ) {
-              const color = layer.ef[fill].ef[kIndex]
-                .v as AnimatedProperty.Color;
-
-              colors.push(<colorEdit>{
-                id: layer.ind,
-                index,
-                indexes: ["layers", index, "ef", fill, "ef", kIndex, "v", "k"],
-                color: color.k as Helpers.ColorRgba,
-                hex: RGBAToHexA(color.k as Helpers.ColorRgba),
-              });
-            }
-          }
+          // const color = layer?.ks?.a as AnimatedProperty.Color;
+          //
+          // colors.push(<colorEdit>{
+          //   id: layer.ind,
+          //   index,
+          //   indexes: ["layers", index, "ks", "a", "k"],
+          //   color: color.k as Helpers.ColorRgba,
+          //   hex: RGBAToHexA(color.k as Helpers.ColorRgba),
+          // });
         }
 
         /** TYPE Images **/
@@ -93,8 +132,6 @@ export const lottieSlice = createSlice({
                 if ("c" in color) {
                   const c = color.c as AnimatedProperty.Color;
                   colors.push(<colorEdit>{
-                    id: layer.ind,
-                    index,
                     indexes: [
                       "layers",
                       index,
@@ -126,8 +163,6 @@ export const lottieSlice = createSlice({
 
             if (layer.t.d.k[0].s.fc) {
               colors.push(<colorEdit>{
-                id: layer.ind,
-                index,
                 indexes: ["layers", index, "t", "d", "k", "0", "s", "fc"],
                 color: layer.t.d.k[0].s.fc,
                 hex: RGBAToHexA(layer.t.d.k[0].s.fc),
@@ -135,9 +170,7 @@ export const lottieSlice = createSlice({
             }
             if (layer.t.d.k[0].s.sc) {
               colors.push(<colorEdit>{
-                id: layer.ind,
                 indexes: ["layers", index, "t", "d", "k", "0", "s", "sc"],
-                index,
                 color: layer.t.d.k[0].s.sc,
                 hex: RGBAToHexA(layer.t.d.k[0].s.sc),
               });
@@ -153,14 +186,14 @@ export const lottieSlice = createSlice({
         ) as Asset.Image[];
       }
       state.colors = colors;
-      const hexes = [...new Set(colors.map((c) => c.hex))].toSorted((a, b) =>
+      state.hexes = [...new Set(colors.map((c) => c.hex))].toSorted((a, b) =>
         a < b ? -1 : 1,
       );
 
       state.currentPalette = palettes.findIndex(
         (x) =>
           JSON.stringify(x.colors.toSorted((a, b) => (a < b ? -1 : 1))) ===
-          JSON.stringify(hexes),
+          JSON.stringify(state.hexes),
       );
 
       const audios = animationData.layers?.filter((layer) => layer.ty === 6);
@@ -211,11 +244,22 @@ export const lottieSlice = createSlice({
         JSON.stringify(state.animationData),
       ) as Animation;
       state.animationData = null;
+      const colors = JSON.parse(JSON.stringify(state.colors));
       const palette = { ...palettes[action.payload] };
       const current = { ...palettes[state.currentPalette] };
 
+      console.log("current", current, palette);
+
       current.colors.forEach((color, index) => {
         state.colors.forEach((c, cIndex) => {
+          console.log(
+            "index",
+            color,
+            palette.colors[index],
+            HEXToRGB(palette.colors[index]),
+            JSON.parse(JSON.stringify(c)),
+          );
+
           if (c.hex === color) {
             c.indexes.reduce((acc, key, i) => {
               // @ts-expect-error: Key not valid
@@ -231,8 +275,8 @@ export const lottieSlice = createSlice({
               return acc[key];
             }, animationData);
 
-            state.colors[cIndex] = {
-              ...c,
+            colors[cIndex] = {
+              ...JSON.parse(JSON.stringify(c)),
               color: HEXToRGB(palette.colors[index]),
               hex: palette.colors[index],
             };
@@ -240,6 +284,7 @@ export const lottieSlice = createSlice({
         });
       });
 
+      state.colors = colors;
       state.currentPalette = action.payload;
       state.animationData = animationData;
     },

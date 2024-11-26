@@ -1,13 +1,13 @@
 import { Animation } from "@lottie-animation-community/lottie-types";
-import album_release from "@/lib/album_release.json";
-import event from "@/lib/event.json";
-import test from "@/lib/thisisjustatest.json";
+import collab from "@/lib/json/undamento_collab.json";
+import event from "@/lib/json/undamento_evento.json";
+import album from "@/lib/json/undamento_nuovo_album.json";
 import { Palette, Template } from "@/lib/types";
 
 export const animations: Template[] = [
   {
     id: 1,
-    animation: album_release as Animation,
+    animation: album as Animation,
     title: "Album Release",
     screenshot: "Album_release.png",
   },
@@ -19,22 +19,22 @@ export const animations: Template[] = [
   },
   {
     id: 3,
-    animation: test as Animation,
-    title: "Test",
-    screenshot: "Event.png",
+    animation: collab as Animation,
+    title: "Collaborazioni",
+    screenshot: "undamento_collab.png",
   },
 ];
 export const palettes: Palette[] = [
   {
     name: "Dark / Yellow",
-    colors: ["#1c1c1c", "#f7ad57", "#f5ab57"],
+    colors: ["#1c1c1c", "#f5ab57"],
   },
   {
     name: "Light / Green",
-    colors: ["#f2ede5", "#3f8b3e", "#3e8a3d"],
+    colors: ["#f2ede5", "#3e8a3d"],
   },
   {
-    name: "Pink / Yellow",
-    colors: ["#1c1c1c", "#f63", "#dad"],
+    name: "Red / White",
+    colors: ["#c12900", "#f2ede5"],
   },
 ];
