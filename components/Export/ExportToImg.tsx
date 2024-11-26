@@ -59,21 +59,25 @@ export const ExportToImg = ({
     setLoading(true);
     try {
       const data = await fetch(
-        "https://4qfw82mps9.execute-api.eu-west-1.amazonaws.com/prod/images",
+        "https://designotron-api.azurewebsites.net/video",
         {
           method: "POST",
           body: JSON.stringify({
+            type: "png",
             animationData,
-            frame: Math.round(currentTime),
+            frameNumber: Math.round(currentTime),
           }),
           headers: {
+            Accept: "application/json",
             "Content-Type": "application/json",
-            "x-api-key": "k3dc9lEUYN1ec9xl64e923RujZYqiashaxzjvsmE",
           },
         },
       );
-      const posts = await data.json();
-      console.log("return", posts);
+      const posts = await data.blob();
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(posts);
+      link.download = `screen.png`;
+      link.click();
     } catch (error) {
       console.log("error", error);
     }

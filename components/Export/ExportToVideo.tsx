@@ -1,5 +1,5 @@
 import ImageIcon from "@mui/icons-material/Image";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, LinearProgress, Popover } from "@mui/material";
 import { MouseEvent, RefObject, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ExportButton } from "@/components/Export/ExportButton";
@@ -41,20 +41,24 @@ export const ExportToVideo = ({
     onSelect("video");
     try {
       const data = await fetch(
-        "https://4qfw82mps9.execute-api.eu-west-1.amazonaws.com/prod/lottie",
+        "https://designotron-api.azurewebsites.net/video",
         {
           method: "POST",
-          body: JSON.stringify(animationData),
+          body: JSON.stringify({
+            type: "mp4",
+            animationData,
+          }),
           headers: {
+            Accept: "application/json",
             "Content-Type": "application/json",
-            "x-api-key": "k3dc9lEUYN1ec9xl64e923RujZYqiashaxzjvsmE",
           },
         },
       );
-      const posts = await data.json();
+      console.log("data", data);
+      const posts = await data.blob();
       console.log("return", posts);
       const link = document.createElement("a");
-      link.href = posts.url;
+      link.href = window.URL.createObjectURL(posts);
       link.download = `video.mp4`;
       link.click();
     } catch (error) {
@@ -63,33 +67,78 @@ export const ExportToVideo = ({
     setLoading(false);
   };
 
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          return 0;
+        }
+        const diff = Math.random() * 5;
+        return Math.min(oldProgress + diff, 100);
+      });
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [loading]);
+
   if (!anchor.current) return null;
 
   return (
-    <ExportButton
-      color="success"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      startIcon={
-        loading ? (
-          <CircularProgress size={24} color="secondary" />
-        ) : (
-          <ImageIcon />
-        )
-      }
-      onClick={handleClick}
-      sx={{
-        width: selected ? 300 : 100,
-        transition: "width 1s",
-        borderRadius: 20,
-        "& .MuiButton-startIcon": selected
-          ? {}
-          : {
-              margin: 0,
-            },
-      }}
-    >
-      {show ? <span>Export VIDEO</span> : <span style={{ minHeight: 24 }} />}
-    </ExportButton>
+    <>
+      <ExportButton
+        color="success"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        startIcon={
+          loading ? (
+            <CircularProgress size={24} color="secondary" />
+          ) : (
+            <ImageIcon />
+          )
+        }
+        onClick={handleClick}
+        sx={{
+          width: selected ? 300 : 100,
+          transition: "width 1s",
+          borderRadius: 20,
+          "& .MuiButton-startIcon": selected
+            ? {}
+            : {
+                margin: 0,
+              },
+        }}
+      >
+        {show ? <span>Export VIDEO</span> : <span style={{ minHeight: 24 }} />}
+      </ExportButton>
+      <Popover
+        open={loading}
+        anchorEl={anchor.current}
+        sx={{ width: 350 }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: -20,
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <div
+          style={{ width: 300, height: 50 }}
+          className="flex justify-center items-center"
+        >
+          <div style={{ width: 200 }}>
+            <LinearProgress
+              color="secondary"
+              variant="determinate"
+              value={progress}
+            />
+          </div>
+        </div>
+      </Popover>
+    </>
   );
 };

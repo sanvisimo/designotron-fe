@@ -248,7 +248,8 @@ export const lottieSlice = createSlice({
         JSON.stringify(state.animationData),
       ) as Animation;
       state.animationData = null;
-      let layers = animationData.layers;
+      let layers;
+      // let assets = animationData.assets;
       if (action.payload) {
         layers = [
           ...animationData.layers,
@@ -260,9 +261,11 @@ export const lottieSlice = createSlice({
         layers = animationData.layers.filter(
           (layer) => layer.ind && !state.logo.includes(layer.ind),
         );
+        // assets = [...(state.imageAssets ?? [])];
       }
       state.animationData = {
         ...animationData,
+        // assets,
         layers,
       };
 
