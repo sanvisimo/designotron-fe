@@ -32,6 +32,9 @@ export const ImageInput = ({ image, onChange }: ImageInputProps) => {
           sx: (theme) => ({
             background: theme.palette.secondary.main,
             border: "none",
+            "& .MuiFileInput-placeholder": {
+              color: "white !important",
+            },
           }),
           inputProps: {
             accept: "image/*",

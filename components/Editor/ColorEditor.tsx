@@ -51,7 +51,8 @@ export const ColorEditor = ({ anchor }: ColorEditorProps) => {
                   index === 0 ? currentPalette[1] : currentPalette[0];
 
                 return (
-                  !palettes[indice]?.exclude.includes(palette.id) && (
+                  !palettes[indice]?.exclude.includes(palette.id) &&
+                  !currentPalette.includes(palette.id) && (
                     <MenuItem
                       key={palette.name.trim()}
                       onClick={() => handleChoose(index, palette.id)}
