@@ -15,7 +15,9 @@ export const Sidebar = () => {
   );
 
   const defaultColor = useMemo(
-    () => palettes?.[currentPalette]?.color,
+    () =>
+      palettes?.[currentPalette]?.colors[1] ??
+      palettes?.[currentPalette]?.colors[0],
     [currentPalette],
   );
 
