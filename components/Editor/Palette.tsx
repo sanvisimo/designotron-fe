@@ -27,7 +27,15 @@ export const PaletteComponent = ({
         }}
       >
         <span>{palette.name}</span>
-        <Box sx={{ width: 24, height: 24, background: palette.color }} />
+        <Box
+          sx={(theme) => ({
+            width: 24,
+            height: 24,
+            background: palette.color,
+            border: "1px solid black",
+            ...theme.applyStyles("dark", { border: "1px solid white" }),
+          })}
+        />
       </Stack>
     </Box>
   );
