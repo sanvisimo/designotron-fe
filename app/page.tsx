@@ -2,7 +2,7 @@
 
 import { Stack, Box, Card, CardContent, Divider } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorEditor } from "@/components/Editor/ColorEditor";
 import { ImageEditor } from "@/components/Editor/ImageEditor";
@@ -24,8 +24,9 @@ export default function Home() {
   const { animationData, logo } = useSelector(
     (state: RootState) => state.lottie,
   );
-  useEffect(() => {
-    dispatch(setAnimationData(1));
+
+  useLayoutEffect(() => {
+    dispatch(setAnimationData(0));
   }, []);
 
   return (
@@ -41,41 +42,42 @@ export default function Home() {
         })}
       >
         <Header />
-        <div className="px-2 mx-2">
-          <Stack
-            spacing={2}
-            direction="row"
-            sx={{ alignItems: "center", justifyContent: "space-between" }}
-          >
-            <Sidebar />
-            <div>
-              {animationData && <Player key={animationData?.nm?.trim()} />}
-            </div>
-            <Stack spacing={2} sx={{ width: "313px" }}>
-              <Card
-                sx={{
-                  minWidth: 275,
-                  visibility: logo.length ? "visible" : "hidden",
-                }}
-                ref={cardRef}
-              >
-                <CardContent>
-                  <Stack
-                    spacing={2}
-                    divider={<Divider flexItem />}
-                    style={{ justifyContent: "center" }}
-                  >
-                    <ColorEditor anchor={cardRef} />
-                    <LogoSwitch />
-                  </Stack>
-                </CardContent>
-              </Card>
 
-              <TextEditor />
-              <ImageEditor key={animationData?.nm ?? "1"} />
-            </Stack>
+        <Stack
+          className="px-2 mx-2"
+          spacing={2}
+          direction="row"
+          sx={{ alignItems: "start", justifyContent: "space-between" }}
+        >
+          <Sidebar />
+          <div>
+            {animationData && <Player key={animationData?.nm?.trim()} />}
+          </div>
+          <Stack spacing={2} sx={{ width: "313px" }}>
+            <Card
+              sx={{
+                minWidth: 275,
+                visibility: logo.length ? "visible" : "hidden",
+              }}
+              ref={cardRef}
+            >
+              <CardContent>
+                <Stack
+                  spacing={2}
+                  divider={<Divider flexItem />}
+                  style={{ justifyContent: "center" }}
+                >
+                  <ColorEditor anchor={cardRef} />
+                  <LogoSwitch />
+                </Stack>
+              </CardContent>
+            </Card>
+
+            <TextEditor />
+            <ImageEditor key={animationData?.nm ?? "1"} />
           </Stack>
-        </div>
+        </Stack>
+
         <div className="px-2 mx-2">
           <Stack
             spacing={2}

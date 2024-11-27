@@ -5,7 +5,7 @@ import { EditorLabel } from "@/components/Editor/EditorLabel";
 import { PaletteComponent } from "@/components/Editor/Palette";
 import { MenuOver } from "@/components/Layout/MenuOver";
 import { palettes } from "@/lib/defaults";
-import { setColors } from "@/lib/features/player/lottieSlice";
+import { setColor } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
 export type ColorEditorProps = {
@@ -14,48 +14,57 @@ export type ColorEditorProps = {
 
 export const ColorEditor = ({ anchor }: ColorEditorProps) => {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const handleClick = () => {
-    setOpen(true);
+  const [open, setOpen] = useState<number | null>(null);
+  const handleClick = (num: number) => {
+    setOpen(num);
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpen(null);
   };
 
   const { currentPalette } = useSelector((state: RootState) => state.lottie);
-  const handleChoose = (index: number) => {
-    dispatch(setColors(index));
-    setOpen(false);
+  const handleChoose = (index: number, paletteId: number) => {
+    dispatch(setColor({ index, paletteId }));
+    setOpen(null);
   };
 
   if (!anchor.current) return null;
 
-  return (
-    <div>
-      <EditorLabel>COLOR PALETTE</EditorLabel>
-      <div>
-        {palettes.map(
-          (pal, index) =>
-            index === currentPalette && (
-              <PaletteComponent
-                palette={pal}
-                onClick={handleClick}
-                key={pal.name.trim()}
-              />
-            ),
-        )}
-        <MenuOver anchorEl={anchor.current} open={open} onClose={handleClose}>
-          {palettes.map((palette, index) => (
-            <MenuItem
-              key={palette.name.trim()}
-              onClick={() => handleChoose(index)}
-              sx={{ p: 2, background: "none" }}
+  return currentPalette.map(
+    (id, index) =>
+      palettes[id] && (
+        <div key={palettes[id]?.name}>
+          <EditorLabel>COLOR {index + 1}</EditorLabel>
+          <div>
+            <PaletteComponent
+              palette={palettes[id]}
+              onClick={() => handleClick(id)}
+              key={palettes[id]?.name?.trim()}
+            />
+            <MenuOver
+              anchorEl={anchor.current}
+              open={open === id}
+              onClose={handleClose}
             >
-              <PaletteComponent palette={palette} />
-            </MenuItem>
-          ))}
-        </MenuOver>
-      </div>
-    </div>
+              {palettes.map((palette) => {
+                const indice =
+                  index === 0 ? currentPalette[1] : currentPalette[0];
+
+                return (
+                  !palettes[indice]?.exclude.includes(palette.id) && (
+                    <MenuItem
+                      key={palette.name.trim()}
+                      onClick={() => handleChoose(index, palette.id)}
+                      sx={{ p: 2, background: "none" }}
+                    >
+                      <PaletteComponent palette={palette} justify />
+                    </MenuItem>
+                  )
+                );
+              })}
+            </MenuOver>
+          </div>
+        </div>
+      ),
   );
 };

@@ -14,7 +14,7 @@ import { colorEdit, LottieState } from "@/lib/types";
 // Define the initial state using that type
 const initialState: LottieState = {
   currentAnimation: 0,
-  currentPalette: 0,
+  currentPalette: [0, 1],
   animationData: null,
   frameRate: 25,
   time: "0.00 s",
@@ -24,6 +24,7 @@ const initialState: LottieState = {
   logo: [],
   hasLogo: false,
   hexes: [],
+  lottieColors: [],
 };
 
 export const lottieSlice = createSlice({
@@ -46,6 +47,8 @@ export const lottieSlice = createSlice({
       state.texts = {};
       state.logo = [];
 
+      const hexes: string[] = [];
+
       if (animationData.assets && animationData.assets.length) {
         animationData.assets.forEach((asset, index) => {
           if ("layers" in asset) {
@@ -64,10 +67,11 @@ export const lottieSlice = createSlice({
                       if ("c" in color) {
                         const c = color.c as AnimatedProperty.Color;
 
-                        console.log(
-                          "color",
-                          RGBAToHexA(c.k as Helpers.ColorRgba),
-                        );
+                        const hex = RGBAToHexA(c.k as Helpers.ColorRgba);
+
+                        if (!hexes.includes(hex)) {
+                          hexes.push(hex);
+                        }
 
                         colors.push(<colorEdit>{
                           indexes: [
@@ -83,7 +87,8 @@ export const lottieSlice = createSlice({
                             "k",
                           ],
                           color: c.k as Helpers.ColorRgba,
-                          hex: RGBAToHexA(c.k as Helpers.ColorRgba),
+                          hex: hex,
+                          primary: hexes.findIndex((h) => h === hex),
                         });
                       }
                     }
@@ -131,6 +136,11 @@ export const lottieSlice = createSlice({
                 const color = shape.it[itIndex] as Shape.Stroke | Shape.Fill;
                 if ("c" in color) {
                   const c = color.c as AnimatedProperty.Color;
+                  const hex = RGBAToHexA(c.k as Helpers.ColorRgba);
+                  if (!hexes.includes(hex)) {
+                    hexes.push(hex);
+                  }
+
                   colors.push(<colorEdit>{
                     indexes: [
                       "layers",
@@ -143,7 +153,8 @@ export const lottieSlice = createSlice({
                       "k",
                     ],
                     color: c.k as Helpers.ColorRgba,
-                    hex: RGBAToHexA(c.k as Helpers.ColorRgba),
+                    hex: hex,
+                    primary: hexes.findIndex((h) => h === hex),
                   });
                 }
               }
@@ -162,17 +173,29 @@ export const lottieSlice = createSlice({
             }
 
             if (layer.t.d.k[0].s.fc) {
+              const hex = RGBAToHexA(layer.t.d.k[0].s.fc);
+              if (!hexes.includes(hex)) {
+                hexes.push(hex);
+              }
+
               colors.push(<colorEdit>{
                 indexes: ["layers", index, "t", "d", "k", "0", "s", "fc"],
                 color: layer.t.d.k[0].s.fc,
-                hex: RGBAToHexA(layer.t.d.k[0].s.fc),
+                hex: hex,
+                primary: hexes.findIndex((h) => h === hex),
               });
             }
             if (layer.t.d.k[0].s.sc) {
+              const hex = RGBAToHexA(layer.t.d.k[0].s.sc);
+              if (!hexes.includes(hex)) {
+                hexes.push(hex);
+              }
+
               colors.push(<colorEdit>{
                 indexes: ["layers", index, "t", "d", "k", "0", "s", "sc"],
                 color: layer.t.d.k[0].s.sc,
-                hex: RGBAToHexA(layer.t.d.k[0].s.sc),
+                hex: hex,
+                primary: hexes.findIndex((h) => h === hex),
               });
             }
             state.texts[layer.nm].layers.push(layer.ind);
@@ -186,11 +209,11 @@ export const lottieSlice = createSlice({
         ) as Asset.Image[];
       }
       state.colors = colors;
-      state.hexes = [...new Set(colors.map((c) => c.hex))].toSorted((a, b) =>
-        a < b ? -1 : 1,
-      );
+      state.hexes = hexes;
 
-      state.currentPalette = 1;
+      state.currentPalette = hexes.map((hex) =>
+        palettes.findIndex((p) => p.color === hex),
+      );
 
       // state.currentPalette = palettes.findIndex(
       //   (x) =>
@@ -241,54 +264,84 @@ export const lottieSlice = createSlice({
         }
       }
     },
-    setColors: (state, action) => {
+    setColor: (state, action) => {
       const animationData = JSON.parse(
         JSON.stringify(state.animationData),
       ) as Animation;
       state.animationData = null;
-      const colors = JSON.parse(JSON.stringify(state.colors));
-      const palette = { ...palettes[action.payload] };
-      const current = { ...palettes[state.currentPalette] };
+      const colors = JSON.parse(
+        JSON.stringify(
+          state.colors.filter((c) => c.primary === action.payload.index),
+        ),
+      );
+      const palette = { ...palettes[action.payload.paletteId] };
 
-      console.log("current", current, palette);
+      console.log("colors", colors);
+      console.log("palette", palette);
 
-      current.colors.forEach((color, index) => {
-        state.colors.forEach((c, cIndex) => {
-          console.log(
-            "index",
-            color,
-            palette.colors[index],
-            HEXToRGB(palette.colors[index]),
-            JSON.parse(JSON.stringify(c)),
-          );
-
-          if (c.hex === color) {
-            c.indexes.reduce((acc, key, i) => {
+      state.colors
+        .filter((c) => c.primary === action.payload.index)
+        .forEach((c) => {
+          c.indexes.reduce((acc, key, i) => {
+            // @ts-expect-error: Key not valid
+            if (acc[key] === undefined) {
               // @ts-expect-error: Key not valid
-              if (acc[key] === undefined) {
-                // @ts-expect-error: Key not valid
-                acc[key] = {};
-              }
-              if (i === c.indexes.length - 1) {
-                // @ts-expect-error: Key not valid
-                acc[key] = HEXToRGB(palette.colors[index]);
-              }
+              acc[key] = {};
+            }
+            if (i === c.indexes.length - 1) {
               // @ts-expect-error: Key not valid
-              return acc[key];
-            }, animationData);
-
-            colors[cIndex] = {
-              ...JSON.parse(JSON.stringify(c)),
-              color: HEXToRGB(palette.colors[index]),
-              hex: palette.colors[index],
-            };
-          }
+              acc[key] = HEXToRGB(palette.color);
+            }
+            // @ts-expect-error: Key not valid
+            return acc[key];
+          }, animationData);
         });
-      });
 
-      state.colors = colors;
-      state.currentPalette = action.payload;
+      const current = [...state.currentPalette];
+      current[action.payload.index] = palette.id;
+      state.currentPalette = current;
       state.animationData = animationData;
+
+      //
+      // console.log("current", current, palette);
+      //
+      // current.colors.forEach((color, index) => {
+      //   state.colors.forEach((c, cIndex) => {
+      //     console.log(
+      //       "index",
+      //       color,
+      //       palette.colors[index],
+      //       HEXToRGB(palette.colors[index]),
+      //       JSON.parse(JSON.stringify(c)),
+      //     );
+      //
+      //     if (c.hex === color) {
+      //       c.indexes.reduce((acc, key, i) => {
+      //         // @ts-expect-error: Key not valid
+      //         if (acc[key] === undefined) {
+      //           // @ts-expect-error: Key not valid
+      //           acc[key] = {};
+      //         }
+      //         if (i === c.indexes.length - 1) {
+      //           // @ts-expect-error: Key not valid
+      //           acc[key] = HEXToRGB(palette.colors[index]);
+      //         }
+      //         // @ts-expect-error: Key not valid
+      //         return acc[key];
+      //       }, animationData);
+      //
+      //       colors[cIndex] = {
+      //         ...JSON.parse(JSON.stringify(c)),
+      //         color: HEXToRGB(palette.colors[index]),
+      //         hex: palette.colors[index],
+      //       };
+      //     }
+      //   });
+      // });
+      //
+      // state.colors = colors;
+      // state.currentPalette = action.payload;
+      // state.animationData = animationData;
     },
     toggleLogo: (state, action) => {
       const animationData = JSON.parse(
@@ -325,7 +378,7 @@ export const {
   setAnimationData,
   updateText,
   updateImage,
-  setColors,
+  setColor,
   toggleLogo,
 } = lottieSlice.actions;
 
