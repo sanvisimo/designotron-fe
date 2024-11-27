@@ -119,14 +119,14 @@ export const Player = () => {
   return (
     <Box
       className="flex justify-start items-center relative group"
-      sx={{ height: 620 }}
+      sx={{ height: "100%" }}
     >
       {!loaded && (
         <div className="absolute w-100 h-100">
           <CircularProgress />
         </div>
       )}
-      <div ref={animationContainer} style={{ height: 620 }} />
+      <div ref={animationContainer} style={{ height: "calc(100vh - 220px)" }} />
     </Box>
   );
 };

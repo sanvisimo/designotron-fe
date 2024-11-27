@@ -15,6 +15,7 @@ export const ExportContainer = () => {
       direction="row"
       sx={{
         width: 313,
+        flex: "1 0 auto",
         alignItems: "center",
         justifyContent: "space-between",
       }}

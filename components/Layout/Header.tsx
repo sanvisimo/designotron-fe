@@ -11,11 +11,11 @@ export const Header = () => {
         spacing={2}
         sx={{ justifyContent: "space-between", alignItems: "center" }}
       >
-        <div></div>
+        <div />
         <RadiusContainer>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between h-10">
             <div></div>
-            <span>Design-O-Tron</span>
+            <span>Undamento</span>
             <AccountCircle />
           </div>
         </RadiusContainer>

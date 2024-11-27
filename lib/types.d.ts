@@ -18,8 +18,10 @@ export type colorEdit = {
 };
 
 export type Palette = {
+  id: number;
   name: string;
-  colors: string[];
+  color: string;
+  exclude: number[];
 };
 
 export type Template = {

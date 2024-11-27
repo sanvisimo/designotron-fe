@@ -25,14 +25,14 @@ export default function Home() {
     (state: RootState) => state.lottie,
   );
   useEffect(() => {
-    dispatch(setAnimationData(1));
+    dispatch(setAnimationData(0));
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <Box
         component="main"
-        className="h-screen flex align-center justify-between flex-col"
+        className="h-screen flex align-start justify-between flex-col"
         sx={(theme) => ({
           background: "transparent",
           ...theme.applyStyles("dark", {
@@ -41,44 +41,56 @@ export default function Home() {
         })}
       >
         <Header />
-        <div className="px-2 mx-2">
-          <Stack
-            spacing={2}
-            direction="row"
-            sx={{ alignItems: "center", justifyContent: "space-between" }}
+        <Stack
+          spacing={2}
+          direction="row"
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "calc(100vh - 220px)",
+            px: 2,
+            mx: 2,
+          }}
+        >
+          <Sidebar />
+          <div>
+            {animationData && <Player key={animationData?.nm?.trim()} />}
+          </div>
+          <div
+            style={{
+              width: "313px",
+              height: "calc(100vh - 192px)",
+              overflow: "auto",
+            }}
           >
-            <Sidebar />
-            <div>
-              {animationData && <Player key={animationData?.nm?.trim()} />}
-            </div>
-            <Stack spacing={2} sx={{ width: "313px" }}>
-              <Card
-                sx={{
-                  minWidth: 275,
-                  visibility: logo.length ? "visible" : "hidden",
-                }}
-                ref={cardRef}
-              >
-                <CardContent>
-                  <Stack
-                    spacing={2}
-                    divider={<Divider flexItem />}
-                    style={{ justifyContent: "center" }}
-                  >
-                    <ColorEditor anchor={cardRef} />
-                    <LogoSwitch />
-                  </Stack>
-                </CardContent>
-              </Card>
+            <Card
+              sx={{
+                minWidth: 275,
+                visibility: logo.length ? "visible" : "hidden",
+                mb: 2,
+              }}
+              ref={cardRef}
+            >
+              <CardContent>
+                <Stack
+                  spacing={2}
+                  divider={<Divider flexItem />}
+                  style={{ justifyContent: "center" }}
+                >
+                  <ColorEditor anchor={cardRef} />
+                  <LogoSwitch />
+                </Stack>
+              </CardContent>
+            </Card>
 
-              <TextEditor />
-              <ImageEditor key={animationData?.nm ?? "1"} />
-            </Stack>
-          </Stack>
-        </div>
+            <TextEditor />
+            <ImageEditor key={animationData?.nm ?? "1"} />
+          </div>
+        </Stack>
+
         <div className="px-2 mx-2">
           <Stack
-            spacing={2}
+            spacing={4}
             direction="row"
             sx={{
               alignItems: "center",
@@ -86,7 +98,7 @@ export default function Home() {
               my: 4,
             }}
           >
-            <div style={{ width: 175 }} />
+            <div style={{ width: 175, flex: "1 0 auto" }} />
             <Controls />
             <ExportContainer />
           </Stack>

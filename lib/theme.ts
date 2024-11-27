@@ -8,6 +8,9 @@ export const theme = createTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
   },
+  shape: {
+    borderRadius: 10,
+  },
   colorSchemes: {
     light: {
       palette: {

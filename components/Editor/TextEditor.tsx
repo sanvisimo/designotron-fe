@@ -15,7 +15,7 @@ export const TextEditor = () => {
   };
 
   return Object.entries(texts).length ? (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275, mb: 2 }}>
       <CardContent>
         <EditorLabel>CONTENT TEXT</EditorLabel>
         <Stack spacing={2}>

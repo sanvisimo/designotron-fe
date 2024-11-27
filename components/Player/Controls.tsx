@@ -1,7 +1,7 @@
 "use client";
 
 import { Pause, PlayArrow, Repeat, Stop } from "@mui/icons-material";
-import { IconButton, Stack } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { ChangeEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./player.scss";
@@ -52,62 +52,57 @@ export const Controls = () => {
   );
 
   return (
-    <RadiusContainer>
-      <div id="controls" style={{ width: 600 }}>
-        <Stack
-          alignItems="center"
-          spacing={0.5}
-          justifyContent="space-between"
-          direction="row"
-          useFlexGap
+    <RadiusContainer sx={{ width: "100%" }}>
+      <div
+        id="controls"
+        className="h-10 flex items-center justify-betweeb gap-4 w-full"
+      >
+        <IconButton
+          aria-label="play/pause"
+          onClick={handlePlay}
+          sx={{ px: 0, py: 1 }}
         >
-          <IconButton
-            aria-label="play/pause"
-            onClick={handlePlay}
-            sx={{ px: 0, py: 1 }}
-          >
-            {status === "play" ? <Pause /> : <PlayArrow />}
-          </IconButton>
-          <IconButton
-            aria-label="play/pause"
-            onClick={handleStop}
-            sx={{ px: 0, py: 1 }}
-          >
-            <Stop />
-          </IconButton>
-          <div style={{ flex: "1 0 auto" }}>
-            {currentSeconds} / {time}
-          </div>
-          <div className="range">
-            <input
-              id="range1"
-              name="progress"
-              aria-label="progress"
-              type="range"
-              min="0"
-              max="100"
-              step="0.1"
-              value={progress}
-              onChange={handleChange}
-              onInput={handleChange}
-              style={seekerStyle}
-            />
-          </div>
+          {status === "play" ? <Pause /> : <PlayArrow />}
+        </IconButton>
+        <IconButton
+          aria-label="play/pause"
+          onClick={handleStop}
+          sx={{ px: 0, py: 1 }}
+        >
+          <Stop />
+        </IconButton>
+        <div style={{ flex: "1 0 auto" }}>
+          {currentSeconds} / {time}
+        </div>
+        <div className="range">
+          <input
+            id="range1"
+            name="progress"
+            aria-label="progress"
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value={progress}
+            onChange={handleChange}
+            onInput={handleChange}
+            style={seekerStyle}
+          />
+        </div>
 
-          <IconButton
-            aria-label="loop"
-            onClick={handleLoop}
-            sx={(theme) => ({
-              px: 0,
-              py: 1,
-              color: loop
-                ? theme.palette.secondary.main
-                : theme.palette.primary.contrastText,
-            })}
-          >
-            <Repeat />
-          </IconButton>
-        </Stack>
+        <IconButton
+          aria-label="loop"
+          onClick={handleLoop}
+          sx={(theme) => ({
+            px: 0,
+            py: 1,
+            color: loop
+              ? theme.palette.secondary.main
+              : theme.palette.primary.contrastText,
+          })}
+        >
+          <Repeat />
+        </IconButton>
       </div>
     </RadiusContainer>
   );
