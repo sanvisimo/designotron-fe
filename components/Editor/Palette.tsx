@@ -4,19 +4,30 @@ import { Palette } from "@/lib/types";
 
 export type PaletteProps = {
   palette: Palette;
+  justify?: boolean;
   onClick?: (palette: Palette) => void;
 };
 
-export const PaletteComponent = ({ onClick, palette }: PaletteProps) => {
+export const PaletteComponent = ({
+  onClick,
+  palette,
+  justify,
+}: PaletteProps) => {
   return (
-    <Box sx={{ cursor: "pointer" }} onClick={() => onClick?.(palette)}>
-      <Stack direction="row" spacing={1.5}>
+    <Box
+      sx={{ cursor: "pointer", width: justify ? "100%" : 125 }}
+      onClick={() => onClick?.(palette)}
+    >
+      <Stack
+        direction="row"
+        spacing={1.5}
+        sx={{
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
         <span>{palette.name}</span>
-        <Stack direction="row" spacing={1}>
-          {palette.colors.map((col) => (
-            <Box key={col} sx={{ width: 24, height: 24, background: col }} />
-          ))}
-        </Stack>
+        <Box sx={{ width: 24, height: 24, background: palette.color }} />
       </Stack>
     </Box>
   );

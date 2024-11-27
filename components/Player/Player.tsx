@@ -126,7 +126,7 @@ export const Player = () => {
           <CircularProgress />
         </div>
       )}
-      <div ref={animationContainer} style={{ height: "calc(100vh - 220px)" }} />
+      <div ref={animationContainer} style={{ height: "calc(100vh - 280px)" }} />
     </Box>
   );
 };

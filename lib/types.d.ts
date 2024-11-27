@@ -3,6 +3,7 @@ import {
   Asset,
   Helpers,
 } from "@lottie-animation-community/lottie-types";
+import ColorRgba = Helpers.ColorRgba;
 
 export type textEdit = {
   layers: number[];
@@ -15,11 +16,14 @@ export type colorEdit = {
   nm?: string;
   color: Helpers.ColorRgba;
   hex: string;
+  primary: number;
 };
 
 export type Palette = {
+  id: number;
   name: string;
-  colors: string[];
+  color: string;
+  exclude: number[];
 };
 
 export type Template = {
@@ -33,7 +37,7 @@ export type Template = {
 export interface LottieState {
   currentAnimation: number;
   animationData: Animation | null;
-  currentPalette: number;
+  currentPalette: number[];
   frameRate: number;
   time: string;
   colors: colorEdit[];
@@ -42,4 +46,5 @@ export interface LottieState {
   texts: Record<string, textEdit>;
   logo: number[];
   hasLogo: boolean;
+  lottieColors: ColorRgba[];
 }

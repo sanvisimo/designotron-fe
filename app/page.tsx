@@ -2,7 +2,7 @@
 
 import { Stack, Box, Card, CardContent, Divider } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ColorEditor } from "@/components/Editor/ColorEditor";
 import { ImageEditor } from "@/components/Editor/ImageEditor";
@@ -24,7 +24,7 @@ export default function Home() {
   const { animationData, logo } = useSelector(
     (state: RootState) => state.lottie,
   );
-  useEffect(() => {
+  useLayoutEffect(() => {
     dispatch(setAnimationData(0));
   }, []);
 
@@ -41,11 +41,13 @@ export default function Home() {
         })}
       >
         <Header />
+
         <Stack
+          className="px-2 mx-2"
           spacing={2}
           direction="row"
           sx={{
-            alignItems: "center",
+            alignItems: "start",
             justifyContent: "space-between",
             height: "calc(100vh - 220px)",
             px: 2,
@@ -56,18 +58,11 @@ export default function Home() {
           <div>
             {animationData && <Player key={animationData?.nm?.trim()} />}
           </div>
-          <div
-            style={{
-              width: "313px",
-              height: "calc(100vh - 192px)",
-              overflow: "auto",
-            }}
-          >
+          <Stack spacing={2} sx={{ width: "313px" }}>
             <Card
               sx={{
                 minWidth: 275,
                 visibility: logo.length ? "visible" : "hidden",
-                mb: 2,
               }}
               ref={cardRef}
             >
@@ -85,9 +80,8 @@ export default function Home() {
 
             <TextEditor />
             <ImageEditor key={animationData?.nm ?? "1"} />
-          </div>
+          </Stack>
         </Stack>
-
         <div className="px-2 mx-2">
           <Stack
             spacing={4}
