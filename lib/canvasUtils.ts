@@ -154,7 +154,7 @@ export async function getRotatedImage(
 export function RGBAToHexA(rgba: Helpers.ColorRgba) {
   const start = [...rgba];
   for (const R in rgba) {
-    start[R] = Math.round(Number(rgba[R].toFixed(3)) * 255);
+    start[R] = Math.round(Number(rgba[R]) * 255);
   }
 
   let r = start[0].toString(16),

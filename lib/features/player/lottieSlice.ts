@@ -190,11 +190,13 @@ export const lottieSlice = createSlice({
         a < b ? -1 : 1,
       );
 
-      state.currentPalette = palettes.findIndex(
-        (x) =>
-          JSON.stringify(x.colors.toSorted((a, b) => (a < b ? -1 : 1))) ===
-          JSON.stringify(state.hexes),
-      );
+      state.currentPalette = 1;
+
+      // state.currentPalette = palettes.findIndex(
+      //   (x) =>
+      //     JSON.stringify(x.colors.toSorted((a, b) => (a < b ? -1 : 1))) ===
+      //     JSON.stringify(state.hexes),
+      // );
 
       const audios = animationData.layers?.filter((layer) => layer.ty === 6);
       localStorage.setItem("audios", JSON.stringify(audios));
