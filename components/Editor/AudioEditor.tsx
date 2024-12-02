@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
-import { App as AudioCutter } from "@/lib/audio-cutter";
+import { App as AudioCutter } from "@/lib/audio-editor";
 import { updateAudio } from "@/lib/features/player/lottieSlice";
 import { RootState } from "@/lib/store";
 
