@@ -1,7 +1,12 @@
 "use client";
 
 import { CircularProgress, Box } from "@mui/material";
-import lottie, { AnimationItem, BMEnterFrameEvent } from "lottie-web";
+import { Howl } from "howler";
+import lottie, {
+  AnimationConfigWithData,
+  AnimationItem,
+  BMEnterFrameEvent,
+} from "lottie-web";
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,9 +25,21 @@ export const Player = () => {
   const { status, jump, loop, loaded } = useSelector(
     (state: RootState) => state.player,
   );
-  const { animationData } = useSelector((state: RootState) => state.lottie);
+  const { animationData, audioAssets } = useSelector(
+    (state: RootState) => state.lottie,
+  );
 
   const dispatch = useDispatch();
+
+  function createAudio(assetPath: string) {
+    const sound = new Howl({
+      src: [assetPath],
+    });
+    return {
+      ...sound,
+      setVolume: sound.volume,
+    };
+  }
 
   /**
    * Load a new animation, and if it's the case, destroy the previous one
@@ -40,13 +57,18 @@ export const Player = () => {
     animationInstanceRef.current?.destroy();
 
     // Build the animation configuration
-    const config = {
+    const config: AnimationConfigWithData<"svg"> = {
       animationData: JSON.parse(JSON.stringify(animationData)),
       loop,
       autoplay: loop,
       ...forcedConfigs,
       container: animationContainer.current,
     };
+
+    if (audioAssets.length) {
+      // @ts-expect-error params not found
+      config.audioFactory = createAudio(audioAssets[0].p);
+    }
 
     // Save the animation instance
     animationInstanceRef.current = lottie.loadAnimation(config);

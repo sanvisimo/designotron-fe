@@ -4,6 +4,7 @@ import event from "@/lib/json/undamento_evento.json";
 import album from "@/lib/json/undamento_nuovo_album.json";
 import rotation from "@/lib/json/undamento_nuovo_album_rotazione.json";
 import tour from "@/lib/json/undamento_tour.json";
+import musica from "@/lib/json/undamento_tour_musica.json";
 import { Palette, Template } from "@/lib/types";
 
 export const animations: Template[] = [
@@ -35,6 +36,12 @@ export const animations: Template[] = [
     id: 5,
     animation: tour as Animation,
     title: "Tour",
+    screenshot: "undamento_tour.png",
+  },
+  {
+    id: 6,
+    animation: musica as Animation,
+    title: "Tour Musica",
     screenshot: "undamento_tour.png",
   },
 ];

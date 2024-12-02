@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
-import { ImageInput } from "@/components/Editor/ImageInput";
+import { FileInput } from "@/components/Editor/FileInput";
 import { UploadImage } from "@/components/Editor/UploadImage";
 import { RootState } from "@/lib/store";
 
@@ -36,9 +36,9 @@ export const ImageEditor = () => {
       <CardContent>
         <EditorLabel>IMAGE</EditorLabel>
         {imageAssets.map((image) => (
-          <ImageInput key={image.id} image={image} onChange={handleChange} />
+          <FileInput key={image.id} asset={image} onChange={handleChange} />
         ))}
-        <Dialog onClose={handleClose} open={open} fullWidth maxWidth="md">
+        <Dialog onClose={handleClose} open={open} fullWidth>
           <DialogTitle>Select Image</DialogTitle>
           <DialogContent>
             <UploadImage file={file} onClose={handleClose} id={id} />

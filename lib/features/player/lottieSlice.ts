@@ -20,6 +20,7 @@ const initialState: LottieState = {
   time: "0.00 s",
   colors: [],
   imageAssets: [],
+  audioAssets: [],
   texts: {},
   logo: [],
   hasLogo: false,
@@ -48,11 +49,11 @@ export const lottieSlice = createSlice({
       state.logo = [];
 
       const hexes: string[] = [];
+      const audioAssets: Asset.Sound[] = [];
 
       if (animationData.assets && animationData.assets.length) {
         animationData.assets.forEach((asset, index) => {
           if ("layers" in asset) {
-            console.log("asset", asset);
             asset.layers.forEach((layer, layerInd) => {
               if (layer.ty === 4) {
                 layer.shapes.forEach((shape, sIndex: number) => {
@@ -97,8 +98,14 @@ export const lottieSlice = createSlice({
               }
             });
           }
+
+          if ("p" in asset && asset.p.includes("audio")) {
+            audioAssets.push(asset);
+          }
         });
       }
+
+      state.audioAssets = audioAssets;
 
       animationData.layers.forEach((layer, index) => {
         if (!layer.ind || !layer.nm) return;
@@ -264,6 +271,22 @@ export const lottieSlice = createSlice({
         }
       }
     },
+    updateAudio: (state, action) => {
+      const animationData = { ...state.animationData } as Animation;
+      if (animationData.assets && state.audioAssets.length > 0) {
+        const index = animationData.assets.findIndex(
+          (a) => a.id === action.payload.id,
+        );
+        if ("p" in animationData.assets[index]) {
+          animationData.assets[index].p = action.payload.path;
+          const i = state.audioAssets.findIndex(
+            (a) => a.id === action.payload.id,
+          );
+          state.audioAssets[i].p = action.payload.path;
+          state.animationData = animationData;
+        }
+      }
+    },
     setColor: (state, action) => {
       const animationData = JSON.parse(
         JSON.stringify(state.animationData),
@@ -378,6 +401,7 @@ export const {
   setAnimationData,
   updateText,
   updateImage,
+  updateAudio,
   setColor,
   toggleLogo,
 } = lottieSlice.actions;

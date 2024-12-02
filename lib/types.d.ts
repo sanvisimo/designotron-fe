@@ -42,7 +42,8 @@ export interface LottieState {
   time: string;
   colors: colorEdit[];
   hexes?: string[];
-  imageAssets?: Asset.Image[];
+  imageAssets: Asset.Image[];
+  audioAssets: Asset.Sound[];
   texts: Record<string, textEdit>;
   logo: number[];
   hasLogo: boolean;

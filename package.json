@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
     "@emotion/cache": "^11.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -18,7 +19,9 @@
     "@mui/material-nextjs": "^6.1.6",
     "@mui/styles": "^6.1.6",
     "@reduxjs/toolkit": "^2.3.0",
+    "audio-encoder": "^1.0.4",
     "get-orientation": "^1.1.2",
+    "howler": "^2.2.4",
     "lottie-react": "^2.4.0",
     "lottie-web": "^5.12.2",
     "mui-file-input": "^6.0.0",
@@ -29,6 +32,7 @@
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -41,7 +45,8 @@
     "prettier": "^3.3.3",
     "sass": "^1.80.6",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "worker-loader": "^3.0.8"
   },
-  "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee"
+  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"
 }

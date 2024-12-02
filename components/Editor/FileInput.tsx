@@ -5,12 +5,17 @@ import { MuiFileInput } from "mui-file-input";
 import Image from "next/image";
 import { useState } from "react";
 
-export type ImageInputProps = {
-  image: Asset.Image;
+export type FileInputProps = {
+  asset: Asset.Image | Asset.Sound;
   onChange: (id: string, file: File) => void;
+  type?: "image" | "audio";
 };
 
-export const ImageInput = ({ image, onChange }: ImageInputProps) => {
+export const FileInput = ({
+  asset,
+  onChange,
+  type = "image",
+}: FileInputProps) => {
   const [file, setFile] = useState<File | null>(null);
 
   const handleChange = (newFile: File | null, id: string) => {
@@ -23,10 +28,10 @@ export const ImageInput = ({ image, onChange }: ImageInputProps) => {
   return (
     <Stack direction="row" spacing={2}>
       <MuiFileInput
-        key={image.id}
+        key={asset.id}
         value={file}
-        placeholder="Upload image"
-        onChange={(newFile: File | null) => handleChange(newFile, image.id)}
+        placeholder={`Upload ${type}`}
+        onChange={(newFile: File | null) => handleChange(newFile, asset.id)}
         InputProps={{
           color: "secondary",
           sx: (theme) => ({
@@ -37,26 +42,28 @@ export const ImageInput = ({ image, onChange }: ImageInputProps) => {
             },
           }),
           inputProps: {
-            accept: "image/*",
+            accept: type === "image" ? "image/*" : "audio/mp3",
           },
           startAdornment: <FileUpload />,
         }}
       />
-      <Box sx={{ width: "56px", flex: "1 0 auto" }}>
-        <Image
-          src={image.p}
-          sizes="100vw"
-          style={{
-            width: "100%",
-            height: "auto",
-            borderRadius: 5,
-          }}
-          alt={image.id}
-          title={image.id}
-          width={56}
-          height={56}
-        />
-      </Box>
+      {type === "image" && (
+        <Box sx={{ width: "56px", flex: "1 0 auto" }}>
+          <Image
+            src={asset.p}
+            sizes="100vw"
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: 5,
+            }}
+            alt={asset.id}
+            title={asset.id}
+            width={56}
+            height={56}
+          />
+        </Box>
+      )}
     </Stack>
   );
 };

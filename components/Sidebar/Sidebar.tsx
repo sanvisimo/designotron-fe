@@ -21,7 +21,9 @@ export const Sidebar = () => {
 
   return (
     <div className="px-2">
-      <Card sx={{ width: 175 }}>
+      <Card
+        sx={{ width: 175, maxHeight: "calc(100vh - 220px)", overflow: "auto" }}
+      >
         <CardContent>
           <Stack spacing={4} sx={{ p: 2.5 }}>
             {animations.map((animation, index) => {

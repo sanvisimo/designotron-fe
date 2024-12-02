@@ -4,6 +4,7 @@ import { Stack, Box, Card, CardContent, Divider } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AudioEditor } from "@/components/Editor/AudioEditor";
 import { ColorEditor } from "@/components/Editor/ColorEditor";
 import { ImageEditor } from "@/components/Editor/ImageEditor";
 import { LogoSwitch } from "@/components/Editor/LogoSwitch";
@@ -21,7 +22,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const { animationData, logo } = useSelector(
+  const { animationData, logo, audioAssets, imageAssets } = useSelector(
     (state: RootState) => state.lottie,
   );
   useLayoutEffect(() => {
@@ -79,7 +80,10 @@ export default function Home() {
             </Card>
 
             <TextEditor />
-            <ImageEditor key={animationData?.nm ?? "1"} />
+            {!!imageAssets.length && (
+              <ImageEditor key={animationData?.nm ?? "1"} />
+            )}
+            {!!audioAssets.length && <AudioEditor />}
           </Stack>
         </Stack>
         <div className="px-2 mx-2">
