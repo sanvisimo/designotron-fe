@@ -20,6 +20,7 @@
     "@mui/styles": "^6.1.6",
     "@reduxjs/toolkit": "^2.3.0",
     "audio-encoder": "^1.0.4",
+    "clsx": "^2.1.1",
     "get-orientation": "^1.1.2",
     "howler": "^2.2.4",
     "lottie-react": "^2.4.0",

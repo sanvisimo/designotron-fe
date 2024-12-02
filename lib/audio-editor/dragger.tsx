@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import React, { PropsWithChildren } from "react";
+import  { PropsWithChildren } from "react";
 
 export interface Pos {
   x: number;
