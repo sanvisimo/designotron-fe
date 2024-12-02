@@ -31,16 +31,6 @@ export const Player = () => {
 
   const dispatch = useDispatch();
 
-  function createAudio(assetPath: string) {
-    const sound = new Howl({
-      src: [assetPath],
-    });
-    return {
-      ...sound,
-      setVolume: sound.volume,
-    };
-  }
-
   /**
    * Load a new animation, and if it's the case, destroy the previous one
    * @param {Object} forcedConfigs
@@ -67,7 +57,10 @@ export const Player = () => {
 
     if (audioAssets.length) {
       // @ts-expect-error params not found
-      config.audioFactory = createAudio(audioAssets[0].p);
+      config.audioFactory = () =>
+        new Howl({
+          src: audioAssets.map((a) => a.p),
+        });
     }
 
     // Save the animation instance
