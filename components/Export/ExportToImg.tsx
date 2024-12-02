@@ -58,18 +58,21 @@ export const ExportToImg = ({
   const handleImage = async () => {
     setLoading(true);
     try {
-      const data = await fetch("http://localhost:3000/video", {
-        method: "POST",
-        body: JSON.stringify({
-          type: "png",
-          animationData,
-          frameNumber: Math.round(currentTime),
-        }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const data = await fetch(
+        "https://designotron-api.azurewebsites.net/video",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            type: "png",
+            animationData,
+            frameNumber: Math.round(currentTime),
+          }),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       const posts = await data.blob();
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(posts);
