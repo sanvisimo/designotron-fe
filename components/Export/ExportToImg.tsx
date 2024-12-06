@@ -59,7 +59,7 @@ export const ExportToImg = ({
     setLoading(true);
     try {
       const data = await fetch(
-        "https://designotron-api.azurewebsites.net/video",
+        "https://designotron-container.azurewebsites.net/video",
         {
           method: "POST",
           body: JSON.stringify({
