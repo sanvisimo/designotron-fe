@@ -57,7 +57,7 @@ export default function Player({
   const widthDurationRatio = containerWidth / audioBuffer.duration;
   const time2pos = (time: number) => time * widthDurationRatio;
   const audioRef = useRef<HTMLAudioElement>(null);
-  const currentTimeRef = useRef<number>();
+  const currentTimeRef = useRef<number>(null);
 
   const pos2Time = useCallback(
     (pos: number) => pos / widthDurationRatio,
@@ -168,9 +168,7 @@ export default function Player({
         <div className="cursor-current">
           <span className="num">{currentTimeFormatted[0]}</span>
           &apos;
-          <span className="num">
-            {currentTimeFormatted[1]}
-          </span>.
+          <span className="num">{currentTimeFormatted[1]}</span>.
           <span className="num">
             {currentTimeFormatted[2].toString().padStart(2, "0")}
           </span>
