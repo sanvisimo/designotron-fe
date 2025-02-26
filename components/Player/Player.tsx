@@ -1,6 +1,6 @@
 "use client";
 
-import { CircularProgress, Box } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import { Howl } from "howler";
 import lottie, {
   AnimationConfigWithData,
@@ -19,7 +19,7 @@ import {
 import { RootState } from "@/lib/store";
 
 export const Player = () => {
-  const animationInstanceRef = useRef<AnimationItem>();
+  const animationInstanceRef = useRef<AnimationItem>(null);
   const animationContainer = useRef<HTMLDivElement>(null);
 
   const { status, jump, loop, loaded } = useSelector(
@@ -74,7 +74,7 @@ export const Player = () => {
     // Return a function that will clean up
     return () => {
       animationInstanceRef.current?.destroy();
-      animationInstanceRef.current = undefined;
+      animationInstanceRef.current = null;
       dispatch(setPlay("stop"));
     };
   };
@@ -132,16 +132,22 @@ export const Player = () => {
   }, [animationInstanceRef, loop, loaded, animationData]);
 
   return (
-    <Box
-      className="flex justify-start items-center relative group"
-      sx={{ height: "100%" }}
+    <Stack
+      direction="row"
+      className="group"
+      sx={{
+        height: "100%",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        position: "relative",
+      }}
     >
       {!loaded && (
-        <div className="absolute w-100 h-100">
+        <div style={{ position: "absolute", width: "100%", height: "100%" }}>
           <CircularProgress />
         </div>
       )}
       <div ref={animationContainer} style={{ height: "calc(100vh - 280px)" }} />
-    </Box>
+    </Stack>
   );
 };

@@ -1,8 +1,10 @@
+"use client";
+
 import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   typography: {
-    fontFamily: `'DM Sans', 'DM Sans Fallback', sans-serif`,
+    fontFamily: "var(--font-dm_sans)", //`'DM Sans', 'DM Sans Fallback', sans-serif`,
     fontSize: 14,
     fontWeightLight: 300,
     fontWeightRegular: 400,

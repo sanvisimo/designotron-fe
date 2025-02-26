@@ -1,3 +1,5 @@
+"use client";
+
 import { MenuItem } from "@mui/material";
 import { RefObject, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

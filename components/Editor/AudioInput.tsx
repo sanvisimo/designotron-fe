@@ -1,3 +1,5 @@
+"use client";
+
 import { Asset } from "@lottie-animation-community/lottie-types";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Stack } from "@mui/material";

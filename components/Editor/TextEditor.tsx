@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, Stack, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";
@@ -28,10 +30,11 @@ export const TextEditor = () => {
                     label={key}
                     type="text"
                     value={value.text}
+                    slotProps={{ htmlInput: { maxLength: 13 } }}
                     autoFocus={false}
                     variant="standard"
                     onChange={(e) => {
-                      handleChange(key, e.target.value);
+                      handleChange(key, e.target.value.toUpperCase());
                     }}
                   />
                 </div>

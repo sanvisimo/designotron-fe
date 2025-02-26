@@ -1,3 +1,5 @@
+"use client";
+
 import { Popover, PopoverProps } from "@mui/material";
 
 export const MenuOver = ({ children, ...props }: PopoverProps) => {

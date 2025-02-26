@@ -1,3 +1,5 @@
+"use client";
+
 import ImageIcon from "@mui/icons-material/Image";
 import {
   Button,
@@ -59,7 +61,8 @@ export const ExportToImg = ({
     setLoading(true);
     try {
       const data = await fetch(
-        "https://designotron-container.azurewebsites.net/video",
+        // "https://designotron-container.azurewebsites.net/video",
+        "http://localhost:3000/video",
         {
           method: "POST",
           body: JSON.stringify({
@@ -100,7 +103,7 @@ export const ExportToImg = ({
         }
         onClick={handleOpen}
         sx={{
-          width: selected ? 300 : 100,
+          width: selected ? 200 : "auto",
           transition: "width 1s",
           borderRadius: 20,
           "& .MuiButton-startIcon": selected
@@ -110,7 +113,7 @@ export const ExportToImg = ({
               },
         }}
       >
-        {show ? <span>Export PNG</span> : <span style={{ minHeight: 24 }} />}
+        {show ? <span>PNG</span> : <span style={{ minHeight: 24 }} />}
       </ExportButton>
       <Popover
         open={open}

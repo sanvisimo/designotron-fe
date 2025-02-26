@@ -37,8 +37,16 @@ export const lottieSlice = createSlice({
       if (action.payload === null || action.payload === undefined) return;
       const colors: colorEdit[] = [];
 
-      const animationData = animations[action.payload].animation;
-      state.currentAnimation = action.payload;
+      console.log("animations", animations, action.payload);
+
+      const animationIndex = animations?.findIndex(
+        (a) => a.id === action.payload,
+      );
+
+      if (animationIndex === -1) return;
+      const animationData = animations[animationIndex].animation;
+
+      state.currentAnimation = animationIndex;
 
       state.frameRate = animationData.fr ?? 25;
 

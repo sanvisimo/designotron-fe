@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Slider,
@@ -29,9 +31,10 @@ export type UploadImageProps = {
   id: string;
   file: File | null;
   onClose: () => void;
+  ratio: number;
 };
 
-export const UploadImage = ({ id, file, onClose }: UploadImageProps) => {
+export const UploadImage = ({ id, file, onClose, ratio }: UploadImageProps) => {
   const dispatch = useDispatch();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -100,7 +103,7 @@ export const UploadImage = ({ id, file, onClose }: UploadImageProps) => {
           crop={crop}
           rotation={rotation}
           zoom={zoom}
-          aspect={770 / 770}
+          aspect={ratio}
           onCropChange={setCrop}
           onRotationChange={setRotation}
           onCropComplete={onCropComplete}

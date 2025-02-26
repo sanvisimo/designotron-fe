@@ -1,11 +1,14 @@
-import { Stack } from "@mui/material";
+"use client";
+
+import { SaveAs } from "@mui/icons-material";
+import { Button, Stack } from "@mui/material";
 import { useRef, useState } from "react";
 import { ExportToImg } from "@/components/Export/ExportToImg";
 import { ExportToVideo } from "@/components/Export/ExportToVideo";
 
 export const ExportContainer = () => {
   const exportRef = useRef(null);
-  const [selected, setSelected] = useState<"img" | "video">("video");
+  const [selected, setSelected] = useState<"img" | "video" | null>(null);
   const [clicked, setClicked] = useState<"img" | "video" | null>(null);
 
   return (
@@ -34,6 +37,14 @@ export const ExportContainer = () => {
         onMouseEnter={() => setSelected("video")}
         onMouseLeave={() => setSelected("video")}
       />
+      <Button
+        aria-label="draft"
+        color="primary"
+        variant="contained"
+        sx={{ borderRadius: 20 }}
+      >
+        <SaveAs />
+      </Button>
     </Stack>
   );
 };

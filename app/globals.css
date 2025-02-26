@@ -1,8 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @font-face {
   font-family: "Field Gothic";
   src: url("../fonts/Field_Gothic.ttf") format("opentype");
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width:100vw;
+  height: 100vh;
 }

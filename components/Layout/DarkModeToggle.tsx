@@ -1,3 +1,5 @@
+"use client";
+
 import { LightMode, DarkMode } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";

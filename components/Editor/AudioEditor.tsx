@@ -1,3 +1,5 @@
+"use client";
+
 import { Asset } from "@lottie-animation-community/lottie-types";
 import {
   Button,

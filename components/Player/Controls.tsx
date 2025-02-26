@@ -1,7 +1,7 @@
 "use client";
 
 import { Pause, PlayArrow, Repeat, Stop } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { ChangeEvent, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./player.scss";
@@ -53,9 +53,17 @@ export const Controls = () => {
 
   return (
     <RadiusContainer sx={{ width: "100%" }}>
-      <div
+      <Stack
         id="controls"
-        className="h-10 flex items-center justify-betweeb gap-4 w-full"
+        sx={{
+          width: "100%",
+          height: "2.5rem",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+        useFlexGap
+        spacing={4}
+        direction="row"
       >
         <IconButton
           aria-label="play/pause"
@@ -103,7 +111,7 @@ export const Controls = () => {
         >
           <Repeat />
         </IconButton>
-      </div>
+      </Stack>
     </RadiusContainer>
   );
 };

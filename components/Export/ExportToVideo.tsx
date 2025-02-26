@@ -1,5 +1,12 @@
+"use client";
+
 import ImageIcon from "@mui/icons-material/Image";
-import { CircularProgress, LinearProgress, Popover } from "@mui/material";
+import {
+  CircularProgress,
+  LinearProgress,
+  Popover,
+  Stack,
+} from "@mui/material";
 import { MouseEvent, RefObject, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ExportButton } from "@/components/Export/ExportButton";
@@ -41,7 +48,8 @@ export const ExportToVideo = ({
     onSelect("video");
     try {
       const data = await fetch(
-        "https://designotron-container.azurewebsites.net/video",
+        // "https://designotron-container.azurewebsites.net/video",
+        "http://localhost:3000/video",
         {
           method: "POST",
           body: JSON.stringify({
@@ -99,7 +107,7 @@ export const ExportToVideo = ({
         }
         onClick={handleClick}
         sx={{
-          width: selected ? 300 : 100,
+          width: selected ? 200 : "auto",
           transition: "width 1s",
           borderRadius: 20,
           "& .MuiButton-startIcon": selected
@@ -109,7 +117,7 @@ export const ExportToVideo = ({
               },
         }}
       >
-        {show ? <span>Export VIDEO</span> : <span style={{ minHeight: 24 }} />}
+        {show ? <span>VIDEO</span> : <span style={{ minHeight: 24 }} />}
       </ExportButton>
       <Popover
         open={loading}
@@ -124,9 +132,14 @@ export const ExportToVideo = ({
           horizontal: "right",
         }}
       >
-        <div
-          style={{ width: 300, height: 50 }}
-          className="flex justify-center items-center"
+        <Stack
+          direction="row"
+          sx={{
+            width: 300,
+            height: 50,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <div style={{ width: 200 }}>
             <LinearProgress
@@ -135,7 +148,7 @@ export const ExportToVideo = ({
               value={progress}
             />
           </div>
-        </div>
+        </Stack>
       </Popover>
     </>
   );

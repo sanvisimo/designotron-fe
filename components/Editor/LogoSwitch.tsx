@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, FormControlLabel, Switch } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { EditorLabel } from "@/components/Editor/EditorLabel";

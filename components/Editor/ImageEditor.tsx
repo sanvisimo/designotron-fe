@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -16,11 +18,16 @@ export const ImageEditor = () => {
   const [file, setFile] = useState<File | null>(null);
   const [id, setId] = useState("");
   const [open, setOpen] = useState(false);
+  const [ratio, setRatio] = useState(0);
   const { imageAssets } = useSelector((state: RootState) => state.lottie);
 
   const handleChange = (value: string, newFile: File) => {
     setFile(newFile);
     setId(value);
+    const asset = imageAssets.find((asset) => asset.id === value);
+    if (asset && asset.w && asset.h) {
+      setRatio(asset.w / asset.h);
+    }
     setOpen(true);
   };
 
@@ -41,7 +48,12 @@ export const ImageEditor = () => {
         <Dialog onClose={handleClose} open={open} fullWidth>
           <DialogTitle>Select Image</DialogTitle>
           <DialogContent>
-            <UploadImage file={file} onClose={handleClose} id={id} />
+            <UploadImage
+              file={file}
+              onClose={handleClose}
+              id={id}
+              ratio={ratio}
+            />
           </DialogContent>
         </Dialog>
       </CardContent>
